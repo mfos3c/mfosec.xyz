@@ -755,7 +755,21 @@
     useLocal = true;
     localVid.style.display = 'block';
     iframe.style.display = 'none';
-    try{ localVid.muted = true; localVid.play(); }catch(_){}
+    // try unmuted autoplay first; if browser blocks (most do), fall back to muted
+    try {
+      localVid.muted = false;
+      localVid.volume = 0.6;
+      const p = localVid.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {
+          // unmuted autoplay blocked → start muted; first user gesture will unmute
+          localVid.muted = true;
+          localVid.play().catch(()=>{});
+        });
+      }
+    } catch (_) {
+      try { localVid.muted = true; localVid.play(); } catch (__) {}
+    }
   }
   function showIframe(){
     useLocal = false;
@@ -802,8 +816,35 @@
     btn.title = m ? 'background audio: muted' : 'background audio: on';
   }
 
-  btn.addEventListener('click', () => setMuted(!isMuted));
-  setMuted(true);
+  btn.addEventListener('click', () => {
+    userInteracted = true;
+    setMuted(!isMuted);
+  });
+
+  // Try to start with audio ON. Browser will probably force-mute the
+  // <video> for the first paint (autoplay policy). We sync the button UI
+  // to whatever actually happened, then the first real user gesture
+  // (click / keydown / wheel / touch) flips audio back on automatically.
+  let userInteracted = false;
+  function syncFromVideo() {
+    setMuted(!!localVid.muted);
+  }
+  // Reflect the actual <video>.muted state once playback starts
+  localVid.addEventListener('playing', syncFromVideo, { once: true });
+  localVid.addEventListener('volumechange', () => {
+    // Don't fight the user once they've interacted
+    if (!userInteracted) setMuted(!!localVid.muted);
+  });
+  setMuted(!!localVid.muted);
+
+  // Auto-unmute on first user gesture (allowed by autoplay policy)
+  const events = ['pointerdown','click','keydown','wheel','touchstart','scroll'];
+  const onFirstGesture = () => {
+    userInteracted = true;
+    if (isMuted) setMuted(false);
+    events.forEach(e => window.removeEventListener(e, onFirstGesture, true));
+  };
+  events.forEach(e => window.addEventListener(e, onFirstGesture, { capture: true, passive: true }));
 })();
 
 /* legacy ASCII background — disabled */
