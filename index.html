@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>mfosec // DEDSEC_ctOS_breach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Bungee&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg2:#0f0f10;
+    --panel:rgba(8,8,10,0.86);
+    --panel2:rgba(14,14,16,0.92);
+    --border:#1a1a1f;
+    --border-strong:#2a2a32;
+    --text:#f1f1f3;
+    --muted:#666673;
+    --magenta:#c300ff;
+    --magenta2:#ff00aa;
+    --green:#c6ff00;
+    --green2:#a4ff00;
+    --amber:#ffaa00;
+    --danger:#ff3355;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'JetBrains Mono',ui-monospace,monospace;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{min-height:100vh;line-height:1.55;cursor:crosshair}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--magenta);color:#fff}
+
+  /* ============================================================
+     YOUTUBE BACKGROUND VIDEO — full viewport cover, 16:9 maintained
+  ============================================================ */
+  .bg-video-wrap{
+    position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;
+    overflow:hidden;pointer-events:none;background:#000;
+  }
+  .bg-video-wrap iframe,
+  .bg-video-wrap video{
+    position:absolute;top:50%;left:50%;
+    width:100vw;height:56.25vw;       /* 16:9 — width-driven */
+    min-height:100vh;min-width:177.78vh; /* 16:9 — height-driven */
+    transform:translate(-50%,-50%);
+    border:0;pointer-events:none;
+    object-fit:cover;background:#000;
+  }
+  /* black tint over video so foreground stays readable */
+  .bg-video-wrap::after{
+    content:'';position:absolute;inset:0;background:rgba(0,0,0,.42);
+    pointer-events:none;
+  }
+
+  /* CRT scanlines (subtle, on top of ASCII) */
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:60;
+    background:repeating-linear-gradient(to bottom,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);
+    mix-blend-mode:screen;
+  }
+  /* Vignette — light center, darker edges so video is clearly visible */
+  body::after{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:59;
+    background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.78) 100%);
+  }
+
+  /* Halftone dot overlay — Watch Dogs 2 pop-art (subtle) */
+  .halftone{
+    position:fixed;inset:0;z-index:55;pointer-events:none;opacity:.05;
+    background-image:radial-gradient(circle,#fff 1px,transparent 1.5px);
+    background-size:8px 8px;
+    mix-blend-mode:overlay;
+  }
+
+  /* Nav */
+  nav.topbar{
+    position:sticky;top:0;z-index:40;
+    backdrop-filter:blur(8px) saturate(1.4);
+    background:rgba(10,10,10,.78);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:24px;font-size:13px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Bungee',sans-serif;color:var(--green);letter-spacing:.06em;text-transform:uppercase;font-size:14px}
+  .brand .dot{width:9px;height:9px;background:var(--magenta);box-shadow:0 0 12px var(--magenta);animation:blink 1.4s steps(2) infinite;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+  .brand .alt{color:var(--magenta);font-weight:400}
+  .nav-links{display:flex;gap:18px;margin-left:auto;color:var(--muted)}
+  .nav-links a{transition:color .15s;letter-spacing:.04em;text-transform:lowercase}
+  .nav-links a:hover{color:var(--green)}
+  .nav-cta{padding:7px 14px;border:2px solid var(--magenta);color:#fff;background:var(--magenta);font-family:'Bungee',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.08em;transform:skewX(-8deg);transition:all .15s}
+  .nav-cta:hover{background:var(--green);border-color:var(--green);color:#000;box-shadow:6px 6px 0 var(--magenta)}
+  .nav-cta span{display:inline-block;transform:skewX(8deg)}
+
+  /* Mute toggle in nav */
+  .mute-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    width:38px;height:34px;padding:0;
+    border:2px solid var(--green);background:rgba(0,0,0,.6);color:var(--green);
+    cursor:pointer;transition:all .15s;font-family:inherit;
+  }
+  .mute-btn:hover{background:var(--green);color:#000;box-shadow:3px 3px 0 var(--magenta)}
+  .mute-btn.muted{border-color:var(--muted);color:var(--muted)}
+  .mute-btn.muted:hover{border-color:var(--green);color:var(--green);background:rgba(198,255,0,.08);box-shadow:none}
+  .mute-btn svg{width:18px;height:18px;display:block}
+
+  /* Container */
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:10}
+
+  /* HERO */
+  .hero{position:relative;padding:48px 0 80px;overflow:hidden;min-height:92vh;display:flex;flex-direction:column;justify-content:center}
+
+  .hero-status{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  .hero-status .left,.hero-status .right{display:flex;gap:14px;align-items:center}
+  .hero-status .ok{color:var(--green)}
+  .hero-status .pulse{width:7px;height:7px;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.5s ease-in-out infinite;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+
+  /* Watch Dogs 2 -- comic panels */
+  .panels{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:14px;margin-bottom:28px}
+  .panel{position:relative;background:rgba(8,8,10,.78);border:2px solid #fff;padding:0;overflow:hidden;min-height:280px}
+  .panel.sm{min-height:200px}
+  .panel-img{width:100%;height:100%;display:block}
+
+  .panel-tag{
+    position:absolute;font-family:'Bungee',sans-serif;font-size:18px;color:#000;background:var(--green);
+    padding:6px 12px;letter-spacing:.04em;text-transform:uppercase;
+    border:2px solid #000;transform:rotate(-4deg);box-shadow:4px 4px 0 #000;
+  }
+  .panel-tag.mag{background:var(--magenta);color:#fff;transform:rotate(3deg)}
+  .panel-tag.tl{top:14px;left:14px}
+  .panel-tag.bl{bottom:14px;left:14px}
+  .panel-tag.tr{top:14px;right:14px}
+  .panel-tag.br{bottom:14px;right:14px}
+
+  /* Center mfosec hero */
+  .hero-main{
+    background:rgba(8,8,10,.82);border:2px solid #fff;padding:36px 32px;position:relative;overflow:hidden;
+  }
+  .hero-main::before{
+    content:'';position:absolute;top:0;left:0;width:0;height:0;
+    border-top:30px solid var(--magenta);border-right:30px solid transparent;
+  }
+  .hero-main::after{
+    content:'';position:absolute;bottom:0;right:0;width:0;height:0;
+    border-bottom:30px solid var(--green);border-left:30px solid transparent;
+  }
+  #hero-ascii{display:block;width:100%;height:280px}
+  .hero-tag{
+    position:absolute;top:16px;right:16px;font-family:'Bungee',sans-serif;font-size:12px;
+    color:#000;background:var(--green);padding:4px 10px;border:2px solid #000;
+    transform:rotate(2deg);box-shadow:3px 3px 0 #000;letter-spacing:.04em
+  }
+
+  .speech{
+    position:absolute;background:#fff;color:#000;font-family:'Bungee',sans-serif;
+    padding:10px 16px;border:3px solid #000;
+    font-size:14px;letter-spacing:.02em;text-transform:uppercase;
+    transform:rotate(-3deg);box-shadow:5px 5px 0 var(--magenta);
+  }
+  .speech::after{content:'';position:absolute;width:0;height:0}
+  .speech.tl{top:-12px;left:30px}
+  .speech.br{bottom:-14px;right:24px;transform:rotate(2deg);box-shadow:5px 5px 0 var(--green)}
+
+  /* Hero text */
+  .hero-bottom{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;align-items:end;margin-top:8px}
+  .tagline{font-size:15px;color:rgba(241,241,243,.92);max-width:680px;line-height:1.7;background:rgba(8,8,10,.7);padding:18px;border:1px solid var(--border-strong)}
+  .tagline .acc{color:var(--green);font-weight:600}
+  .tagline .mag{color:var(--magenta);font-weight:600}
+
+  .hero-cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;font-family:'Bungee',sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;transition:all .15s;cursor:pointer;border:2px solid;transform:skewX(-8deg)}
+  .btn span{display:inline-block;transform:skewX(8deg)}
+  .btn-primary{background:var(--green);color:#000;border-color:#000;box-shadow:5px 5px 0 var(--magenta)}
+  .btn-primary:hover{background:#fff;box-shadow:8px 8px 0 var(--magenta);transform:skewX(-8deg) translate(-2px,-2px)}
+  .btn-mag{background:var(--magenta);color:#fff;border-color:#000;box-shadow:5px 5px 0 var(--green)}
+  .btn-mag:hover{background:#fff;color:#000;box-shadow:8px 8px 0 var(--green);transform:skewX(-8deg) translate(-2px,-2px)}
+
+  /* Section heading */
+  section{position:relative;padding:80px 0;scroll-margin-top:60px;z-index:5}
+  .sec-head{display:flex;align-items:center;gap:14px;margin-bottom:32px}
+  .sec-head .num{font-family:'Bungee',sans-serif;color:#000;background:var(--magenta);padding:4px 10px;font-size:14px;letter-spacing:.06em;border:2px solid #000;transform:rotate(-3deg);box-shadow:3px 3px 0 #000}
+  .sec-head h2{font-family:'Bungee',sans-serif;font-size:28px;font-weight:400;margin:0;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+  .sec-head h2 .ext{color:var(--green)}
+  .sec-head .rule{flex:1;height:3px;background:repeating-linear-gradient(90deg,var(--green) 0 8px,transparent 8px 14px,var(--magenta) 14px 22px,transparent 22px 28px)}
+  .sec-head .meta{font-size:11px;color:var(--muted);letter-spacing:.05em}
+
+  /* Cards (WD2 sticker style) */
+  .about-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}
+  .card{background:rgba(8,8,10,.88);border:2px solid #fff;padding:24px;transition:all .15s;position:relative}
+  .card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--green)}
+  .card.mag:hover{box-shadow:6px 6px 0 var(--magenta)}
+  .about-text{font-size:14px;color:rgba(241,241,243,.9);line-height:1.75}
+  .about-text + p{margin-top:14px;color:rgba(241,241,243,.72)}
+  .acc{color:var(--green);font-weight:600}
+  .mag{color:var(--magenta);font-weight:600}
+
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+  .tag{font-size:10px;padding:4px 9px;background:#fff;color:#000;font-family:'Bungee',sans-serif;letter-spacing:.04em;text-transform:uppercase;border:2px solid #000;transform:rotate(-1deg)}
+  .tag:nth-child(2n){transform:rotate(2deg);background:var(--green)}
+  .tag:nth-child(3n){transform:rotate(-2deg);background:var(--magenta);color:#fff}
+  .tag:hover{transform:rotate(0) scale(1.1);z-index:5}
+
+  .stat{display:flex;align-items:baseline;justify-content:space-between;padding:14px 0;border-bottom:2px dashed rgba(255,255,255,.08)}
+  .stat:last-child{border:0;padding-bottom:0}
+  .stat .label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+  .stat .v{font-family:'Bungee',sans-serif;color:var(--green);font-size:30px;font-weight:400;font-feature-settings:"tnum"}
+  .stat:nth-child(2n) .v{color:var(--magenta)}
+  .panel-title{font-family:'Bungee',sans-serif;color:#000;background:var(--green);padding:4px 10px;font-size:11px;margin-bottom:14px;letter-spacing:.06em;display:inline-block;border:2px solid #000;transform:rotate(-2deg)}
+
+  /* Expertise */
+  .expertise{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .exp-card{background:rgba(8,8,10,.88);border:2px solid #fff;padding:22px;transition:all .15s;position:relative}
+  .exp-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--magenta)}
+  .exp-card:nth-child(2):hover{box-shadow:6px 6px 0 var(--green)}
+  .exp-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .exp-icon{width:42px;height:42px;display:grid;place-items:center;background:var(--green);color:#000;font-weight:700;font-size:20px;border:2px solid #000;transform:rotate(-5deg);box-shadow:3px 3px 0 #000;font-family:'Bungee',sans-serif}
+  .exp-card:nth-child(2) .exp-icon{background:var(--magenta);color:#fff}
+  .exp-card h3{margin:0;font-family:'Bungee',sans-serif;font-size:16px;font-weight:400;letter-spacing:.04em;text-transform:uppercase}
+  .exp-card .sub{color:var(--magenta);font-family:'Bungee',sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+  .exp-card:nth-child(2) .sub{color:var(--green)}
+  .exp-list{list-style:none;padding:0;margin:0;font-size:13px;color:rgba(241,241,243,.85);line-height:1.95}
+  .exp-list li{padding-left:18px;position:relative}
+  .exp-list li::before{content:'▸';position:absolute;left:0;color:var(--green)}
+  .exp-card:nth-child(2) .exp-list li::before{color:var(--magenta)}
+
+  .tools-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:18px}
+  .tool{background:rgba(8,8,10,.85);border:2px solid #fff;padding:14px 8px;text-align:center;font-size:11px;color:#fff;transition:all .15s;text-transform:uppercase;letter-spacing:.05em;font-family:'Bungee',sans-serif}
+  .tool:hover{background:var(--green);color:#000;border-color:#000;transform:rotate(-3deg)}
+  .tool:nth-child(2n):hover{background:var(--magenta);color:#fff}
+  .tool .ic{font-size:20px;display:block;margin-bottom:6px;color:var(--green)}
+  .tool:nth-child(2n) .ic{color:var(--magenta)}
+
+  /* Findings */
+  .findings{display:grid;gap:8px}
+  .finding{display:grid;grid-template-columns:90px 1fr 130px 90px;gap:18px;align-items:center;padding:16px 18px;background:rgba(8,8,10,.85);border:2px solid #fff;font-size:13px;transition:all .15s}
+  .finding:hover{transform:translateX(4px);box-shadow:-6px 0 0 var(--green),6px 6px 0 var(--magenta)}
+  .pill{display:inline-flex;align-items:center;font-family:'Bungee',sans-serif;padding:4px 10px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border:2px solid #000;transform:rotate(-3deg);box-shadow:2px 2px 0 #000}
+  .p-crit{background:var(--danger);color:#000}
+  .p-high{background:var(--amber);color:#000}
+  .p-med{background:var(--green);color:#000}
+  .p-low{background:var(--magenta);color:#fff}
+  .finding .title{color:var(--text);font-weight:500;font-size:13px}
+  .finding .summary{font-size:11px;color:var(--muted);margin-top:4px;font-weight:400;line-height:1.5}
+  .finding .platform{color:var(--muted);font-size:10px;letter-spacing:.05em;text-transform:uppercase}
+  .finding .reward{font-family:'Bungee',sans-serif;color:var(--green);text-align:right;font-size:14px;font-feature-settings:"tnum"}
+
+  /* Projects */
+  .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .proj{background:rgba(8,8,10,.88);border:2px solid #fff;padding:20px;display:flex;flex-direction:column;transition:all .15s;position:relative;overflow:hidden}
+  .proj:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 var(--green)}
+  .proj:nth-child(3n):hover{box-shadow:6px 6px 0 var(--magenta)}
+  .proj::before{content:'';position:absolute;top:0;right:0;width:30px;height:30px;background:var(--magenta);clip-path:polygon(100% 0,0 0,100% 100%)}
+  .proj:nth-child(3n)::before{background:var(--green)}
+  .proj-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+  .proj-name{font-family:'Bungee',sans-serif;font-size:14px;color:#fff;letter-spacing:.02em;text-transform:lowercase}
+  .proj-name .arr{color:var(--green);margin-right:4px}
+  .proj:nth-child(3n) .proj-name .arr{color:var(--magenta)}
+  .proj-tag{font-size:10px;color:var(--magenta);margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+  .proj:nth-child(3n) .proj-tag{color:var(--green)}
+  .proj-desc{font-size:12px;color:rgba(241,241,243,.7);flex:1;line-height:1.6}
+  .proj-meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:9px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+  .proj-stack{display:flex;gap:4px;flex-wrap:wrap}
+  .proj-stack span{padding:2px 6px;border:1px solid var(--border-strong);background:rgba(255,255,255,.04)}
+
+  /* Contact */
+  .contact-card{background:rgba(8,8,10,.92);border:3px solid #fff;padding:44px;text-align:center;position:relative;overflow:hidden}
+  .contact-card::before{content:'';position:absolute;top:0;left:0;width:0;height:0;border-top:40px solid var(--magenta);border-right:40px solid transparent}
+  .contact-card::after{content:'';position:absolute;bottom:0;right:0;width:0;height:0;border-bottom:40px solid var(--green);border-left:40px solid transparent}
+  .contact-card .stamp{display:inline-block;font-family:'Bungee',sans-serif;background:var(--magenta);color:#fff;padding:6px 14px;border:2px solid #000;transform:rotate(-3deg);box-shadow:4px 4px 0 #000;font-size:12px;letter-spacing:.06em;margin-bottom:16px}
+  .contact-card h3{margin:0 0 12px;font-family:'Bungee',sans-serif;font-size:30px;font-weight:400;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+  .contact-card h3 .acc{color:var(--green)}
+  .contact-card p{color:rgba(241,241,243,.75);font-size:13px;max-width:540px;margin:0 auto 24px}
+  .contact-list{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+  .ct{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:2px solid #fff;background:rgba(0,0,0,.5);color:#fff;font-size:12px;transition:all .15s;font-family:'Bungee',sans-serif;letter-spacing:.04em;text-transform:lowercase}
+  .ct:hover{background:var(--green);color:#000;border-color:#000;transform:rotate(-2deg);box-shadow:3px 3px 0 #000}
+  .ct:nth-child(2n):hover{background:var(--magenta);color:#fff}
+
+  /* Footer */
+  footer{border-top:1px solid var(--border);padding:28px 0;margin-top:60px;font-size:10px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;position:relative;z-index:5;background:rgba(10,10,10,.7)}
+  .foot{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  .foot .left{display:flex;align-items:center;gap:8px}
+  .foot .left .live{color:var(--green);animation:blink 2s steps(2) infinite;font-size:14px}
+
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.6)}}
+
+  /* Responsive */
+  @media(max-width:980px){
+    .panels{grid-template-columns:1fr}
+    .panel.sm{display:none}
+    .about-grid,.expertise,.hero-bottom{grid-template-columns:1fr}
+    .projects{grid-template-columns:1fr 1fr}
+    .finding{grid-template-columns:80px 1fr;gap:10px}
+    .finding .platform,.finding .reward{display:none}
+    .tools-grid{grid-template-columns:repeat(3,1fr)}
+    #hero-ascii{height:200px}
+    .hero-cta{justify-content:flex-start}
+  }
+  @media(max-width:560px){
+    .projects{grid-template-columns:1fr}
+    .nav-links{display:none}
+    #hero-ascii{height:160px}
+    .nav-cta{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- Background — Watch Dogs 2 main menu loop -->
+<!-- If /Users/mfosec/mfosec.xyz/wd2-bg.mp4 exists, the <video> tag below plays it.
+     Otherwise the YouTube iframe fallback kicks in via JS. -->
+<div class="bg-video-wrap">
+  <video id="bg-local" autoplay muted loop playsinline preload="auto" poster="">
+    <source src="wd2-bg.mp4" type="video/mp4" />
+  </video>
+  <iframe
+    id="bg-video"
+    style="display:none"
+    src="https://www.youtube.com/embed/okGPcoToS3Y?autoplay=1&mute=1&loop=1&playlist=okGPcoToS3Y&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&disablekb=1&fs=0&enablejsapi=1"
+    title="Watch Dogs 2 main menu background"
+    allow="autoplay; encrypted-media; fullscreen"
+    allowfullscreen
+    frameborder="0"
+    referrerpolicy="strict-origin-when-cross-origin"
+    loading="eager"
+  ></iframe>
+</div>
+<div class="halftone"></div>
+
+<nav class="topbar">
+  <div class="nav-inner">
+    <a href="#top" class="brand"><span class="dot"></span>mfosec<span class="alt">::DEDSEC</span></a>
+    <div class="nav-links">
+      <a href="#about">~/about</a>
+      <a href="#expertise">~/expertise</a>
+      <a href="#findings">~/findings</a>
+      <a href="#projects">~/projects</a>
+      <a href="#contact">~/contact</a>
+    </div>
+    <button id="mute-btn" class="mute-btn muted" type="button" aria-label="Toggle background audio" title="background audio">
+      <!-- muted icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+    </button>
+    <a href="#contact" class="nav-cta"><span>[ initiate_breach ]</span></a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+
+    <div class="hero-status">
+      <div class="left">
+        <span class="pulse"></span>
+        <span class="ok">network::online</span>
+        <span>node::ist-tr-7</span>
+        <span>uptime::1247d</span>
+      </div>
+      <div class="right">
+        <span>v3.4.1_dedsec</span>
+        <span>2026.05.10 // 03:14:07 UTC+3</span>
+      </div>
+    </div>
+
+    <!-- Centerpiece: hero-main with ASCII fox + MFOSEC -->
+    <div class="hero-main">
+      <span class="hero-tag">EXPECT_US</span>
+      <canvas id="hero-ascii"></canvas>
+      <div class="speech tl">OMG!!! IT'S MFOSEC!</div>
+      <div class="speech br">access ::: granted</div>
+    </div>
+
+    <div class="hero-bottom">
+      <p class="tagline">
+        offensive security researcher. <span class="acc">smart-contract auditor</span> &amp;
+        <span class="mag">web2 appsec specialist</span>. i find the path that drains the
+        contract, then write the post-mortem so the rest of you don't have to.
+        based out of istanbul. always shipping foundry PoCs.
+      </p>
+      <div class="hero-cta">
+        <a href="#findings" class="btn btn-primary"><span>view_findings ↗</span></a>
+        <a href="#contact" class="btn btn-mag"><span>hire_me ↗</span></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">01</span>
+      <h2>about<span class="ext">.md</span></h2>
+      <span class="rule"></span>
+      <span class="meta">cat /dev/self</span>
+    </div>
+    <div class="about-grid">
+      <div class="card">
+        <p class="about-text">
+          i'm <span class="acc">mfosec</span> — independent offensive security researcher based in istanbul.
+          my day job is reading bytecode at 2am, breaking economic invariants for sport, and turning
+          theoretical attack vectors into runnable foundry PoCs.
+        </p>
+        <p class="about-text">
+          primary domain is <span class="acc">smart-contract security</span> — EVM internals, solidity
+          edge cases, DeFi primitives (AMM math, lending invariants, LSDs, ERC-4626 vaults), bridge
+          attack surfaces, account abstraction (ERC-4337). secondary: <span class="mag">web2 appsec</span>
+          — authN/Z bypasses, SSRF, request smuggling, JWT confusion, supply-chain attacks.
+        </p>
+        <p class="about-text">
+          if it holds value, i'll find the path that drains it. then i'll show you how to close it.
+        </p>
+        <div class="tags">
+          <span class="tag">solidity</span>
+          <span class="tag">yul</span>
+          <span class="tag">EVM</span>
+          <span class="tag">foundry</span>
+          <span class="tag">echidna</span>
+          <span class="tag">halmos</span>
+          <span class="tag">defi</span>
+          <span class="tag">flash loans</span>
+          <span class="tag">oracle manip</span>
+          <span class="tag">reentrancy</span>
+          <span class="tag">erc-4337</span>
+          <span class="tag">bridges</span>
+          <span class="tag">burp</span>
+          <span class="tag">k8s rbac</span>
+          <span class="tag">jwt</span>
+          <span class="tag">ssrf</span>
+        </div>
+      </div>
+
+      <div class="card mag">
+        <div class="panel-title">// stats</div>
+        <div class="stat"><div class="label">findings disclosed</div><div class="v">60+</div></div>
+        <div class="stat"><div class="label">critical / high</div><div class="v">18</div></div>
+        <div class="stat"><div class="label">protocols audited</div><div class="v">22</div></div>
+        <div class="stat"><div class="label">years in offsec</div><div class="v">5+</div></div>
+        <div class="stat"><div class="label">bounty earned</div><div class="v">$420K</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">02</span>
+      <h2>expertise<span class="ext">/</span></h2>
+      <span class="rule"></span>
+      <span class="meta">ls -la skills/</span>
+    </div>
+    <div class="expertise">
+      <div class="exp-card">
+        <div class="exp-head">
+          <span class="exp-icon">⟠</span>
+          <h3>web3 / smart contracts</h3>
+        </div>
+        <div class="sub">primary domain</div>
+        <ul class="exp-list">
+          <li>EVM opcodes, gas, storage layout, transient storage</li>
+          <li>solidity edge cases · yul / inline assembly · via-IR</li>
+          <li>reentrancy (cross-fn, read-only, ERC-777, ERC-4626)</li>
+          <li>oracle manipulation · flash loans · sandwich/JIT MEV</li>
+          <li>signature replay (EIP-712, permit, ecrecover malleability)</li>
+          <li>storage collision · delegatecall injection · proxy init races</li>
+          <li>AMM math (CPMM, stableswap, UniV3 ticks) · lending invariants</li>
+          <li>LSD / LRT (eigenlayer, symbiotic) · bridge merkle proofs</li>
+          <li>ERC-4337 paymasters · bundlers · alt-mempool attacks</li>
+        </ul>
+      </div>
+      <div class="exp-card">
+        <div class="exp-head">
+          <span class="exp-icon">⌘</span>
+          <h3>web2 / infrastructure</h3>
+        </div>
+        <div class="sub">secondary domain</div>
+        <ul class="exp-list">
+          <li>authN/Z bypass · IDOR · SSRF · XXE · prototype pollution</li>
+          <li>HTTP request smuggling · cache poisoning · CSRF</li>
+          <li>JWT alg confusion (none, RS256→HS256) · oauth flaws</li>
+          <li>insecure deserialization · race conditions · TOCTOU</li>
+          <li>cloud IAM privesc · IMDSv2 bypass · S3 policy abuse</li>
+          <li>container escape · k8s RBAC / PSA · supply-chain attacks</li>
+          <li>cryptographic impl flaws · nonce reuse · padding oracles</li>
+          <li>graphql introspection · api fuzzing · burp extensions</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <div class="panel-title">// arsenal</div>
+      <div class="tools-grid">
+        <div class="tool"><span class="ic">⚒</span>foundry</div>
+        <div class="tool"><span class="ic">∿</span>echidna</div>
+        <div class="tool"><span class="ic">◆</span>halmos</div>
+        <div class="tool"><span class="ic">▲</span>slither</div>
+        <div class="tool"><span class="ic">⚡</span>medusa</div>
+        <div class="tool"><span class="ic">⊙</span>tenderly</div>
+        <div class="tool"><span class="ic">⊗</span>aderyn</div>
+        <div class="tool"><span class="ic">▣</span>cast</div>
+        <div class="tool"><span class="ic">⌬</span>burp</div>
+        <div class="tool"><span class="ic">∎</span>nuclei</div>
+        <div class="tool"><span class="ic">⌥</span>ffuf</div>
+        <div class="tool"><span class="ic">⚙</span>rs/py/go</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINDINGS -->
+<section id="findings">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">03</span>
+      <h2>findings<span class="ext">.log</span></h2>
+      <span class="rule"></span>
+      <span class="meta">tail -f bounties.log</span>
+    </div>
+    <div class="findings">
+
+      <div class="finding">
+        <div><span class="pill p-crit">critical</span></div>
+        <div>
+          <div class="title">cross-pool oracle manipulation → $4.2M drain path</div>
+          <div class="summary">UniV3 TWAP window too short on lending-market price feed; flash-loan tick manipulation made underwater positions appear healthy.</div>
+        </div>
+        <div class="platform">immunefi · 2026-02</div>
+        <div class="reward">$180K</div>
+      </div>
+
+      <div class="finding">
+        <div><span class="pill p-crit">critical</span></div>
+        <div>
+          <div class="title">ERC-4626 vault inflation attack via donation</div>
+          <div class="summary">first-depositor + direct token donation skewed share-price math, letting attacker steal subsequent deposits via rounding.</div>
+        </div>
+        <div class="platform">code4rena · 2026-01</div>
+        <div class="reward">$92.5K</div>
+      </div>
+
+      <div class="finding">
+        <div><span class="pill p-high">high</span></div>
+        <div>
+          <div class="title">delegatecall to attacker-controlled lib in proxy upgrade</div>
+          <div class="summary">missing init-guard on logic contract enabled storage takeover after frontrunning the deployer's first call.</div>
+        </div>
+        <div class="platform">sherlock · 2025-11</div>
+        <div class="reward">$48K</div>
+      </div>
+
+      <div class="finding">
+        <div><span class="pill p-high">high</span></div>
+        <div>
+          <div class="title">ERC-4337 paymaster signature replay across chainIds</div>
+          <div class="summary">UserOperation signature didn't bind chainId; same signed userOp drained paymaster on every supported network.</div>
+        </div>
+        <div class="platform">cantina · 2025-09</div>
+        <div class="reward">$36K</div>
+      </div>
+
+      <div class="finding">
+        <div><span class="pill p-high">high</span></div>
+        <div>
+          <div class="title">read-only reentrancy in liquid-staking accounting</div>
+          <div class="summary">view function returned stale exchange-rate during ETH callback; integrating protocol borrowed against inflated collateral.</div>
+        </div>
+        <div class="platform">immunefi · 2025-07</div>
+        <div class="reward">$54K</div>
+      </div>
+
+      <div class="finding">
+        <div><span class="pill p-med">medium</span></div>
+        <div>
+          <div class="title">request smuggling in CDN → admin route hijack</div>
+          <div class="summary">CL.TE desync against fronting proxy let attacker prepend internal /admin requests to the next user's connection.</div>
+        </div>
+        <div class="platform">hackerone · 2025-06</div>
+        <div class="reward">$15K</div>
+      </div>
+
+      <div class="finding">
+        <div><span class="pill p-med">medium</span></div>
+        <div>
+          <div class="title">JWT alg confusion (RS256 → HS256) on auth gateway</div>
+          <div class="summary">public key used as HMAC secret allowed forgery of arbitrary admin tokens.</div>
+        </div>
+        <div class="platform">bugcrowd · 2025-04</div>
+        <div class="reward">$8.5K</div>
+      </div>
+
+      <div class="finding">
+        <div><span class="pill p-low">low</span></div>
+        <div>
+          <div class="title">k8s RBAC privesc via overly-broad service account</div>
+          <div class="summary">CI runner SA had `secrets/get *` cluster-wide; pivoted to dump kubeconfigs from neighbouring namespaces.</div>
+        </div>
+        <div class="platform">private · 2025-02</div>
+        <div class="reward">$3.2K</div>
+      </div>
+
+    </div>
+    <p style="margin-top:14px;font-size:11px;color:var(--muted);letter-spacing:.04em">// additional reports under NDA / disclosure restrictions</p>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">04</span>
+      <h2>projects<span class="ext">/</span></h2>
+      <span class="rule"></span>
+      <span class="meta">git log --oneline</span>
+    </div>
+    <div class="projects">
+
+      <a class="proj" href="#">
+        <div class="proj-head">
+          <div class="proj-name"><span class="arr">›</span>evm-trace</div>
+          <span style="color:var(--muted)">↗</span>
+        </div>
+        <div class="proj-tag">tx-level invariant tracer</div>
+        <p class="proj-desc">foundry plugin that reconstructs storage delta + balance flow on a forked block, surfacing invariant violations annotated with caller frame.</p>
+        <div class="proj-meta">
+          <div class="proj-stack"><span>rust</span><span>evm</span></div>
+          <span>★ 412</span>
+        </div>
+      </a>
+
+      <a class="proj" href="#">
+        <div class="proj-head">
+          <div class="proj-name"><span class="arr">›</span>flashloan-lab</div>
+          <span style="color:var(--muted)">↗</span>
+        </div>
+        <div class="proj-tag">poc scaffolds for defi exploits</div>
+        <p class="proj-desc">collection of foundry templates: oracle manipulation, donation attacks, sandwiches, share-inflation. drop-in fork + run.</p>
+        <div class="proj-meta">
+          <div class="proj-stack"><span>solidity</span><span>foundry</span></div>
+          <span>★ 287</span>
+        </div>
+      </a>
+
+      <a class="proj" href="#">
+        <div class="proj-head">
+          <div class="proj-name"><span class="arr">›</span>storage-collide</div>
+          <span style="color:var(--muted)">↗</span>
+        </div>
+        <div class="proj-tag">proxy slot collision detector</div>
+        <p class="proj-desc">static-analysis pass over compiled artifacts that flags storage-slot overlap between proxy + impl + base-class hierarchy.</p>
+        <div class="proj-meta">
+          <div class="proj-stack"><span>typescript</span><span>solc</span></div>
+          <span>★ 156</span>
+        </div>
+      </a>
+
+      <a class="proj" href="#">
+        <div class="proj-head">
+          <div class="proj-name"><span class="arr">›</span>4337-fuzz</div>
+          <span style="color:var(--muted)">↗</span>
+        </div>
+        <div class="proj-tag">aa userop differential fuzzer</div>
+        <p class="proj-desc">stateful fuzzer for ERC-4337 entrypoints — paymaster validation, bundler simulation drift, alt-mempool replay.</p>
+        <div class="proj-meta">
+          <div class="proj-stack"><span>go</span><span>aa</span></div>
+          <span>★ 198</span>
+        </div>
+      </a>
+
+      <a class="proj" href="#">
+        <div class="proj-head">
+          <div class="proj-name"><span class="arr">›</span>jwt-trip</div>
+          <span style="color:var(--muted)">↗</span>
+        </div>
+        <div class="proj-tag">jwt edge-case fuzzer</div>
+        <p class="proj-desc">tests alg-confusion, kid path traversal, weak-secret variants, and key-cache poisoning against a target endpoint.</p>
+        <div class="proj-meta">
+          <div class="proj-stack"><span>python</span><span>auth</span></div>
+          <span>★ 203</span>
+        </div>
+      </a>
+
+      <a class="proj" href="#">
+        <div class="proj-head">
+          <div class="proj-name"><span class="arr">›</span>writeups</div>
+          <span style="color:var(--muted)">↗</span>
+        </div>
+        <div class="proj-tag">disclosed-bug walkthroughs</div>
+        <p class="proj-desc">living markdown vault: bridge hacks, defi exploits, web2 chains. each post includes runnable PoC + remediation diff.</p>
+        <div class="proj-meta">
+          <div class="proj-stack"><span>md</span><span>poc</span></div>
+          <span>★ 612</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">05</span>
+      <h2>contact<span class="ext">.sig</span></h2>
+      <span class="rule"></span>
+      <span class="meta">gpg --verify</span>
+    </div>
+    <div class="contact-card">
+      <span class="stamp">:: SIGNAL_OPEN ::</span>
+      <h3>let's break <span class="acc">something</span> together.</h3>
+      <p>open to smart-contract audits, defi protocol reviews, web2 pentests, and ad-hoc security retainers. dm with scope, codebase, and timeline.</p>
+      <div class="contact-list">
+        <a href="mailto:mfos3c@proton.me" class="ct">✉ mfos3c@proton.me</a>
+        <a href="#" class="ct">⌬ x.com/mfosec</a>
+        <a href="#" class="ct">⌖ github.com/mfosec</a>
+        <a href="#" class="ct">⟠ immunefi/mfosec</a>
+        <a href="#" class="ct">⚔ code4rena/mfosec</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot">
+    <div class="left"><span class="live">●</span><span>last build · 2026-05-10 · static / cloudflare pages</span></div>
+    <div>made with <span style="color:var(--magenta)">[redacted]</span> in istanbul</div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   1) Background video — local <video> first, YouTube iframe fallback.
+      Mute toggle in nav controls whichever source is active.
+============================================================ */
+(function(){
+  const localVid = document.getElementById('bg-local');
+  const iframe   = document.getElementById('bg-video');
+  const btn      = document.getElementById('mute-btn');
+
+  let useLocal = true;
+  let isMuted  = true;
+
+  const SVG_MUTED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>';
+  const SVG_ON    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>';
+
+  function showLocal(){
+    useLocal = true;
+    localVid.style.display = 'block';
+    iframe.style.display = 'none';
+    try{ localVid.muted = true; localVid.play(); }catch(_){}
+  }
+  function showIframe(){
+    useLocal = false;
+    localVid.style.display = 'none';
+    iframe.style.display = 'block';
+  }
+
+  // If the local video errors out (file not present), fall back to iframe.
+  localVid.addEventListener('error', showIframe);
+  localVid.addEventListener('stalled', () => {
+    if (localVid.readyState < 2) showIframe();
+  });
+  // Some browsers won't fire 'error' for missing source; check after a beat.
+  setTimeout(() => {
+    if (localVid.readyState === 0 || (localVid.networkState === HTMLMediaElement.NETWORK_NO_SOURCE)) {
+      showIframe();
+    }
+  }, 1500);
+
+  // Initial: try local
+  showLocal();
+
+  // postMessage to YouTube iframe (works cross-origin without IFrame API)
+  function ytCommand(func){
+    if (!iframe || !iframe.contentWindow) return;
+    iframe.contentWindow.postMessage(
+      JSON.stringify({event:'command', func:func, args:[]}),
+      '*'
+    );
+  }
+
+  function setMuted(m){
+    isMuted = m;
+    if (useLocal){
+      localVid.muted = m;
+      if (!m){ localVid.volume = 0.6; localVid.play().catch(()=>{}); }
+    } else {
+      ytCommand(m ? 'mute' : 'unMute');
+      if (!m) ytCommand('playVideo');
+    }
+    btn.classList.toggle('muted', m);
+    btn.innerHTML = m ? SVG_MUTED : SVG_ON;
+    btn.setAttribute('aria-label', m ? 'Unmute background audio' : 'Mute background audio');
+    btn.title = m ? 'background audio: muted' : 'background audio: on';
+  }
+
+  btn.addEventListener('click', () => setMuted(!isMuted));
+  setMuted(true);
+})();
+
+/* legacy ASCII background — disabled */
+(function(){
+  const canvas = null;
+  if (canvas) {
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  // ASCII tile (cycling rows). Each row repeats horizontally.
+  // The pattern combines DEDSEC text, skull glyphs, halftone dots, and noise.
+  const SKULL = [
+    "  ▄▀▀▀▄  ",
+    " █ ◉ ◉ █ ",
+    " █  ▀  █ ",
+    "  ▀█▄█▀  ",
+  ];
+  const tileLines = [];
+  function rep(s, n){ let o=''; while(o.length<n) o+=s; return o.slice(0,n); }
+  const COLS = 240;  // logical tile width
+
+  tileLines.push(rep("░ DEDSEC ▒▓ EXPECT_US ▓▒ ", COLS));
+  tileLines.push(rep("· · · · · · · · · · · · · · · · · · · ", COLS));
+  tileLines.push(rep("▓▒░ ctOS_v3 ░▒▓ DEDSEC_// ", COLS));
+  tileLines.push(rep("∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ∙ ", COLS));
+  // skull row block (4 lines)
+  for (let i=0; i<4; i++) tileLines.push(rep(SKULL[i] + "    ", COLS));
+  tileLines.push(rep(" • • • • • • • • • • • • • • • • • • ", COLS));
+  tileLines.push(rep("EXPECT_US ▓▓▓ ACCESS_GRANTED ▒▒▒ ", COLS));
+  tileLines.push(rep("░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ", COLS));
+  tileLines.push(rep("▓ DEDSEC // mfosec ▒░ ctOS // breach ░▒ ", COLS));
+  tileLines.push(rep(" ░░ ▒▒ ▓▓ ██ ▓▓ ▒▒ ░░ ░░ ▒▒ ▓▓ ██ ▓▓ ", COLS));
+  tileLines.push(rep(" ◆ ◇ ◆ ◇ ◆ ◇ ◆ ◇ ◆ ◇ ◆ ◇ ◆ ◇ ◆ ◇ ", COLS));
+  tileLines.push(rep("// fck_the_system ▓▒░ DEDSEC_4_LIFE ░▒▓ ", COLS));
+  tileLines.push(rep("∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ∘ ", COLS));
+  // skull row again
+  for (let i=0; i<4; i++) tileLines.push(rep("    " + SKULL[i], COLS));
+  tileLines.push(rep("░▒▓█ EXPECT_US █▓▒░  WE_ARE_LEGION  ", COLS));
+  tileLines.push(rep("· ° · ° · ° · ° · ° · ° · ° · ° · ° ", COLS));
+
+  const tileH = tileLines.length;
+
+  const glitchChars = '▒░▓█▌▐╳╲╱│─┼╋╪╫·:;¦*+#@%&{}<>/\\=01';
+
+  let W=0, H=0, cellW=0, cellH=0, cols=0, rows=0;
+  function resize(){
+    W = canvas.width  = Math.floor(window.innerWidth  * dpr);
+    H = canvas.height = Math.floor(window.innerHeight * dpr);
+    canvas.style.width  = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    cellW = 11 * dpr;
+    cellH = 18 * dpr;
+    cols = Math.ceil(W / cellW) + 2;
+    rows = Math.ceil(H / cellH) + 2;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // mouse
+  let mx = -9999, my = -9999, tmx = -9999, tmy = -9999;
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX * dpr;
+    my = e.clientY * dpr;
+  });
+  window.addEventListener('touchmove', e => {
+    if (e.touches[0]) { mx = e.touches[0].clientX * dpr; my = e.touches[0].clientY * dpr; }
+  }, {passive:true});
+
+  function draw(now){
+    // soft fade trail (heavier so trails fade fast → less visual noise)
+    ctx.fillStyle = 'rgba(10,10,10,0.55)';
+    ctx.fillRect(0,0,W,H);
+    ctx.font = (cellH * 0.85) + 'px "JetBrains Mono", monospace';
+    ctx.textBaseline = 'top';
+
+    tmx += (mx - tmx) * 0.16;
+    tmy += (my - tmy) * 0.16;
+    const t = now * 0.001;
+
+    // diagonal drift offset (slower)
+    const driftX = (t * 2) % cellW;
+    const driftY = (t * 1) % cellH;
+
+    for (let r = 0; r < rows; r++) {
+      const tileRow = ((Math.floor((t * 6) / cellH) + r) % tileH + tileH) % tileH;
+      const line = tileLines[tileRow];
+
+      for (let c = 0; c < cols; c += 1) {
+        const tileCol = (c + Math.floor((t * 10) / cellW)) % line.length;
+        let ch = line[tileCol];
+        if (ch === ' ' || ch === undefined) continue;
+        // sparser pattern — skip random cells so background isn't packed
+        if (((c * 7 + r * 13) % 5) === 0) continue;
+
+        const baseX = c * cellW - driftX;
+        const baseY = r * cellH - driftY;
+        const cx = baseX + cellW * 0.5;
+        const cy = baseY + cellH * 0.5;
+
+        // ambient breathing wave (very subtle)
+        const ambient = 0.25 * dpr * Math.sin(c * 0.18 + r * 0.34 + t * 0.6);
+
+        // mouse ripple — only meaningful when cursor is on page
+        let waveY = 0, waveX = 0, heat = 0;
+        const dx = cx - tmx, dy = cy - tmy;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        const falloff = 220 * dpr;
+        heat = Math.exp(-d / falloff);
+        const amp = 14 * dpr * heat;
+        const phase = d / (18 * dpr) - t * 3.5;
+        const w = Math.sin(phase);
+        waveY = amp * w;
+        const nx = d > 0 ? dx / d : 0;
+        waveX = amp * 0.4 * Math.cos(phase) * nx;
+
+        // color zone — split based on noise field
+        const zone = Math.sin(c * 0.04 + t * 0.15) + Math.cos(r * 0.06 - t * 0.1);
+        const isMag = zone > 0;
+        // very dim base; only brightens noticeably under cursor
+        let R, G, B;
+        if (heat > 0.05) {
+          if (isMag) { R = 195; G = 0; B = 255; }
+          else       { R = 198; G = 255; B = 0; }
+          const lift = Math.min(0.85, heat * 1.2);
+          R = Math.round(R + (255 - R) * lift);
+          G = Math.round(G + (255 - G) * lift);
+          B = Math.round(B + (255 - B) * lift);
+        } else {
+          // ambient muted — barely visible
+          if (isMag) { R = 38; G = 0;  B = 52; }
+          else       { R = 40; G = 52; B = 0; }
+        }
+        const baseAlpha = 0.18 + heat * 0.55;
+        ctx.fillStyle = `rgba(${R},${G},${B},${baseAlpha})`;
+
+        // glitch replacement — much rarer
+        let drawCh = ch;
+        if (heat > 0.32 && Math.random() < 0.06) {
+          drawCh = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+        } else if (Math.random() < 0.0002) {
+          drawCh = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+        }
+
+        ctx.fillText(drawCh, baseX + waveX, baseY + ambient + waveY);
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+  } /* end if(canvas) — legacy ASCII disabled */
+})();
+
+/* ============================================================
+   2) HERO centerpiece — DEDSEC fox mask + MFOSEC block text
+   Same ripple distortion, brighter foreground
+============================================================ */
+(function(){
+  const canvas = document.getElementById('hero-ascii');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  const art = [
+    "                                                                                ",
+    "                ░▒▓███████░░░░░░░░░░░░░░░░░░░░░░░░░███████▓▒░                  ",
+    "             ░▒██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██▒░                ",
+    "          ░▒██░░░░▓███████░░░░░░░░░░░░░░░░░░███████▓░░░░░░░░░░██▒░             ",
+    "        ░▒██░░░░██░░░░░░░░██░░░░░░░░░░░░██░░░░░░░░░██░░░░░░░░░██▒░             ",
+    "       ░██░░░░░██░░░██░░░░░░██░░░░░░░░██░░░░░░██░░░██░░░░░░░░░░██░             ",
+    "       ▒█░░░░░░██░░░██░░░░░░██░░░░░░░░██░░░░░░██░░░██░░░░░░░░░░█▒             ",
+    "       ▒█░░░░░░██░░░░░░░░░░██░░░░░░░░░░██░░░░░░░░░░██░░░░░░░░░░█▒             ",
+    "       ░██░░░░░░██░░░░░░░██░░░░░░░░░░░░░░██░░░░░░░██░░░░░░░░░░██░             ",
+    "        ░▒██░░░░░░██████░░░░▓████████▓░░░░██████░░░░░░░░░░░██▒░               ",
+    "          ░▒██░░░░░░░░░░░░██░░░░░░░░░░██░░░░░░░░░░░░░░░░░██▒░                  ",
+    "             ░▒██░░░░░░░░██████████████░░░░░░░░░░░░░░██▒░                       ",
+    "                ░▒▓████████░░░░░░░░░░░░░░░░░░████████▓▒░                       ",
+    "                                                                                ",
+    "    ███╗   ███╗ ███████╗ ██████╗  ███████╗ ███████╗  ██████╗                    ",
+    "    ████╗ ████║ ██╔════╝██╔═══██╗ ██╔════╝ ██╔════╝ ██╔════╝                    ",
+    "    ██╔████╔██║ █████╗  ██║   ██║ ███████╗ █████╗   ██║                         ",
+    "    ██║╚██╔╝██║ ██╔══╝  ██║   ██║ ╚════██║ ██╔══╝   ██║                         ",
+    "    ██║ ╚═╝ ██║ ██║     ╚██████╔╝ ███████║ ███████╗ ╚██████╗                    ",
+    "    ╚═╝     ╚═╝ ╚═╝      ╚═════╝  ╚══════╝ ╚══════╝  ╚═════╝                    ",
+    "                                                                                ",
+    "      :: DEDSEC :: ctOS_breach :: SIGNAL_OPEN :: WE_ARE_MFOSEC ::                "
+  ];
+  const glitchChars = '▒░▓█▌▐╳╲╱│─┼╋╪╫·:;¦*+#@%&{}<>/\\=01';
+  const rows = art.length;
+  const cols = Math.max(...art.map(l => l.length));
+
+  let W=0,H=0,cellW=0,cellH=0,offX=0,offY=0,fontSize=0;
+  function resize(){
+    const rect = canvas.getBoundingClientRect();
+    W = canvas.width  = Math.floor(rect.width  * dpr);
+    H = canvas.height = Math.floor(rect.height * dpr);
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    const fitW = (rect.width - 32) / cols;
+    const fitH = (rect.height - 24) / rows;
+    cellW = Math.min(fitW, fitH * 0.6) * dpr;
+    cellH = cellW / 0.6;
+    fontSize = cellH * 0.95;
+    offX = (W - cellW * cols) / 2;
+    offY = (H - cellH * rows) / 2;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let mx = -9999, my = -9999, tmx = -9999, tmy = -9999;
+  let active = 0;
+  window.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mx = (e.clientX - rect.left) * dpr;
+    my = (e.clientY - rect.top)  * dpr;
+    active = performance.now() + 1500;
+  });
+
+  function draw(now){
+    ctx.fillStyle = 'rgba(8,8,10,0.22)';
+    ctx.fillRect(0,0,W,H);
+    ctx.font = fontSize + 'px "JetBrains Mono", monospace';
+    ctx.textBaseline = 'top';
+
+    tmx += (mx - tmx) * 0.18;
+    tmy += (my - tmy) * 0.18;
+    const isActive = now < active;
+    const t = now * 0.001;
+
+    for (let r = 0; r < rows; r++) {
+      const line = art[r];
+      for (let c = 0; c < line.length; c++) {
+        let ch = line[c];
+        if (ch === ' ') continue;
+
+        const baseX = offX + c * cellW;
+        const baseY = offY + r * cellH;
+        const cx = baseX + cellW * 0.5;
+        const cy = baseY + cellH * 0.5;
+
+        const ambient = 1.4 * dpr * Math.sin(c * 0.32 + r * 0.5 + t * 1.4);
+
+        let waveY = 0, waveX = 0, heat = 0;
+        if (isActive) {
+          const dx = cx - tmx, dy = cy - tmy;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          const falloff = 200 * dpr;
+          heat = Math.exp(-d / falloff);
+          const amp = 32 * dpr * heat;
+          const phase = d / (14 * dpr) - t * 5;
+          const w = Math.sin(phase);
+          waveY = amp * w;
+          const nx = d > 0 ? dx / d : 0;
+          waveX = amp * 0.5 * Math.cos(phase) * nx;
+        }
+
+        // color: keep MFOSEC name + tagline solid white for legibility,
+        // fox mask alternates magenta/green; cursor lifts toward white.
+        const isName = r >= 14 && r <= 19;   // MFOSEC block letters
+        const isTag  = r >= 20;              // bottom DEDSEC tagline
+        let R, G, B;
+        if (isName) {
+          R = 240; G = 240; B = 245;         // near-white name
+        } else if (isTag) {
+          // tagline: split words magenta/green by char
+          const baseIsMag = ((c >> 1) & 1) === 0;
+          if (baseIsMag) { R = 195; G = 0; B = 255; }
+          else           { R = 198; G = 255; B = 0; }
+        } else {
+          // fox mask: 2x2 block alternation (chunkier zones, less per-char noise)
+          const block = ((c >> 1) + (r >> 1)) & 1;
+          if (block === 0) { R = 195; G = 0; B = 255; }
+          else             { R = 198; G = 255; B = 0; }
+        }
+        if (heat > 0.06) {
+          const lift = Math.min(1, heat * 1.4);
+          R = Math.round(R + (255 - R) * lift);
+          G = Math.round(G + (255 - G) * lift);
+          B = Math.round(B + (255 - B) * lift);
+        }
+        const a = 0.92 + heat * 0.08;
+        ctx.fillStyle = `rgba(${R},${G},${B},${a})`;
+
+        // glitch — only near cursor and only on the fox mask, never on the name
+        let drawCh = ch;
+        if (!isName && heat > 0.45 && Math.random() < 0.05) {
+          drawCh = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+        }
+        ctx.fillText(drawCh, baseX + waveX, baseY + ambient + waveY);
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+
+  // intro sweep
+  let demoStart = performance.now();
+  function demo(now){
+    const e = now - demoStart;
+    if (e > 2400) { mx = -9999; my = -9999; return; }
+    const rect = canvas.getBoundingClientRect();
+    const x = rect.left + rect.width * (e/2400);
+    const y = rect.top + rect.height * (0.4 + 0.2*Math.sin(e*0.005));
+    mx = (x - rect.left) * dpr;
+    my = (y - rect.top)  * dpr;
+    active = now + 200;
+    requestAnimationFrame(demo);
+  }
+  requestAnimationFrame(demo);
+})();
+</script>
+
+</body>
+</html>
