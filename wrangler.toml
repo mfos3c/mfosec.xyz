@@ -1,0 +1,13 @@
+name = "mfosec-xyz"
+compatibility_date = "2025-01-01"
+
+[assets]
+directory = "./"
+not_found_handling = "single-page-application"
+
+# Notes:
+# - "directory" points to the project root (contains index.html + wd2-bg.mp4).
+# - No "main" → pure static asset serving (no Worker code).
+# - "not_found_handling = single-page-application" serves index.html on any unknown path.
+# - .git, node_modules, dotfiles, and _archive_* are gitignored / not pushed,
+#   so they aren't included in the Worker bundle.
