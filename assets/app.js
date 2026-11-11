@@ -7,49 +7,7 @@
   /* ------------------------------------------------------------------ */
   /* i18n (EN default, TR)                                               */
   /* ------------------------------------------------------------------ */
-  var TR = {
-    'nav.teardown': 'söküm', 'nav.services': 'hizmetler', 'nav.work': 'işler', 'nav.contact': 'iletişim',
-    'hero.tagline': 'web3 güvenliği · web uygulama güvenliği · çapraz platform uygulamalar',
-    'hero.lede': 'Akıllı kontratları ve web uygulamalarını kırmak bizim işimiz — ve isteğe bağlı web siteleri ile uygulamalar geliştiriyoruz. Tek kod tabanından iOS, Android, web ve masaüstü; yayına çıkmadan önce güvenlik incelemesinden geçer.',
-    'hero.cta1': 'proje başlat ↗', 'hero.cta2': 'neler yapıyoruz', 'hero.scroll': 'sökmek için kaydır',
-    'td.title': 'Her projenin içinde ne var?', 'td.sub': 'Kaydırarak parçalarına ayır. Her katman yaptığımız bir iş.',
-    'l.glass.t': 'ekran → isteğe bağlı geliştirme', 'l.glass.d': 'brifine göre web sitesi ve uygulama',
-    'l.panel.t': 'panel → çapraz platform arayüz', 'l.panel.d': 'tek kod: iOS · Android · web · masaüstü',
-    'l.shell.t': 'kasa → ürün ve tasarım', 'l.shell.d': 'UX, marka, dönüşüm getiren sayfalar',
-    'l.deck.t': 'klavye → web uygulama güvenliği', 'l.deck.d': 'her tuş vuruşu güvenilmeyen girdidir',
-    'l.board.t': 'anakart → web3 güvenliği', 'l.board.d': 'değeri tutan kontratlar',
-    'l.battery.t': 'batarya → altyapı ve yayın', 'l.battery.d': 'Cloudflare Workers · Supabase · CI/CD',
-    'l.bottom.t': 'alt kasa → sıkılaştırma', 'l.bottom.d': 'tehdit modeli, inceleme, yeniden test',
-    'svc.title': 'hizmetler',
-    'od.kicker': '// isteğe bağlı', 'od.title': 'İsteğe bağlı uygulama ve web siteleri.',
-    'od.text': 'İhtiyacını anlat — bir tanıtım sayfası, SaaS paneli, mobil uygulama, Telegram mini app ya da dApp arayüzü. Tasarlıyor, geliştiriyor, yayına alıyor ve çalışır halde tutuyoruz. Her proje, denetimleri yapan ekibin güvenlik incelemesinden geçerek yayına çıkar.',
-    'od.s1': 'brif', 'od.s2': 'prototip', 'od.s3': 'geliştirme', 'od.s4': 'denetim', 'od.s5': 'yayın ve bakım', 'od.cta': 'teklif iste ↗',
-    'c1.t': 'web3 güvenliği', 'c1.d': 'EVM ve Solana üzerinde akıllı kontrat denetimi ve bug avcılığı. Invariant fuzzing, ekonomik saldırı modelleme, çalışan PoC\'ler ve düzeltme incelemesi.',
-    'c1.l2': 'DeFi: AMM, lending, ERC-4626 vault, köprüler', 'c1.l4': 'her bulgu için PoC + düzeltme diff\'i',
-    'c2.t': 'web uygulama güvenliği', 'c2.d': 'Web uygulamaları ve API\'ler için manuel ağırlıklı pentest. Bulgular, tekrar üretilebilir istekler ve net düzeltmelerle gelir; tarayıcı gürültüsüyle değil.',
-    'c2.l1': 'authN/Z bypass · IDOR · SSRF', 'c2.l2': 'request smuggling · cache poisoning', 'c2.l3': 'JWT / OAuth açıkları · WAF bypass',
-    'c3.t': 'çapraz platform uygulamalar', 'c3.d': 'Tek kod tabanı, her ekran. Native hissettiren mobil uygulamalar, hızlı web uygulamaları ve masaüstü sürümler; ölçeklenen bir backend ile.',
-    'c3.l3': 'App Store ve Play Store yayını', 'c3.l4': 'Telegram mini app · dApp arayüzleri',
-    'work.title': 'işler',
-    'bb.title': 'bug bounty tecrübesi',
-    'bb.lede': 'Cantina, Immunefi ve HackenProof\'taki açık bug bounty programlarına gönderilen akıllı kontrat ve protokol bulguları — her biri çalışan bir PoC ile. EVM, Cosmos SDK (Go) ve TON (FunC) üzerinde.',
-    'bb.h1': 'seviye', 'bb.h2': 'program', 'bb.h3': 'bulgu', 'bb.h4': 'teknoloji', 'bb.h5': 'platform', 'bb.dup': 'dup',
-    'bb.f1': 'Kısıtlamasız public swap fonksiyonu, router\'da kalan ERC20 bakiyesini herkesin kendine aktarmasına izin veriyor',
-    'bb.f2': 'Komisyon kütüphanesi referrer\'a sadece çekilen komisyonu değil router\'ın tüm token bakiyesini gönderiyor',
-    'bb.f3': 'Market listelemede float64 hassasiyet kaybı atomicResolution\'ı bir kaydırıyor — izinsiz marketlerde kalıcı 10× yanlış teminat',
-    'bb.f4': 'Aktif validator\'ı olan operatörün silinmesi validator\'ları sahipsiz bırakıyor — stake edilmiş ETH kalıcı olarak donuyor',
-    'bb.f5': 'Relayer ECDSA hash\'i mapping id\'yi içermiyor — bir token eşlemesi için verilen imza başka eşlemede tekrar kullanılabiliyor',
-    'bb.f6': 'Pool ve router geri dönen (bounce) mesajları sessizce yutuyor — başarısız transferlerde rezervler bozuluyor, fonlar sahipsiz kalıyor',
-    'bb.f7': 'Share lock açıkken depositAndBridge her zaman revert ediyor — 32 etkilenen teller konfigürasyonu',
-    'bb.note': 'dup = triage tarafından geçerli bulundu, ancak başka bir araştırmacı daha önce raporlamıştı. Kontrat adresleri ve PoC\'ler paylaşılmıyor.',
-    'pj.title': 'öne çıkan proje', 'pj.kicker': '// müşteri · yedek parça',
-    'pj.text': 'Bir yedek parça deposu için stok sayım ve muhasebe uygulaması. Çalışanlar Android el terminaliyle QR etiketleri okutup rafları çevrimdışı sayıyor, bağlantı gelince senkronize ediliyor; ofis aynı veriyi masaüstü uygulamasından yönetiyor. Supabase tek doğruluk kaynağı, çalışan bazlı yetkilerle.',
-    'pj.f1': 'QR / kamera ile stok sayımı, çevrimdışı çalışır', 'pj.f2': 'fotoğraflı ve OEM numaralı parça kataloğu',
-    'pj.f3': 'stok hareketleri, değerleme ve muhasebe', 'pj.f4': 'tek TypeScript çekirdekten mobil + masaüstü',
-    'ct.title': 'iletişim', 'ct.big': 'Denetlenmesi mi, yapılması mı gerekiyor?',
-    'ct.text': 'Kapsamı, repoyu ya da fikri ve kabaca bir takvimi gönder. Bir gün içinde dönüş yapıyoruz.',
-    'foot.credit': 'ASCII efektleri 21st.dev topluluk bileşenlerinden uyarlandı (Background ASCII Plasma, Text ASCII Cascade — @nikolas-sapa)'
-  };
+  var TR = window.I18N_TR || {};
   var EN = {};
   $$('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
   function setLang(l) {
@@ -70,8 +28,16 @@
   /* ------------------------------------------------------------------ */
   /* Hero + background                                                   */
   /* ------------------------------------------------------------------ */
-  A.glyphTide($('#tide'), { cellSize: 14 });
-  A.asciiCascade($('#banner'), A.blockText('MFOSEC'));
+  var tide = A.glyphTide($('#tide'), { cellSize: 14 });
+  // only animate the background while the hero is on screen
+  new IntersectionObserver(function (en) { tide.setActive(en[0].isIntersecting); }).observe($('.hero'));
+  A.asciiCascade($('#wordmark'), A.blockText('MFOSEC'));
+
+  // nav gets a solid background once the page scrolls
+  var nav = $('#nav'), navOn = null;
+  function navState() { var on = window.scrollY > 24; if (on !== navOn) { navOn = on; nav.classList.toggle('scrolled', on); } }
+  window.addEventListener('scroll', navState, { passive: true });
+  navState();
   $('#yr').textContent = new Date().getFullYear();
 
   /* ------------------------------------------------------------------ */
@@ -224,7 +190,7 @@
   var edge = $('.edge', mac);
   var labels = $$('.label', stage);
   var labelsBox = $('#labels');
-  var progEl = $('#tdProgress');
+  var progBar = $('#tdBar'), progStage = $('#tdStage');
   var W = 440, D = 300;
 
   function buildLegend() {
@@ -288,12 +254,12 @@
     var rz = -30 * b - 8 * f + 30 * 0; // swing
     // bigger while assembled, shrink to fit the tall exploded stack
     var sA = Math.min(1.15, sr.width / (narrow ? 640 : 900), sr.height / 520);
-    var sE = Math.min(1, sr.width / (narrow ? 600 : 1180), sr.height / (narrow ? 980 : 800));
+    var sE = Math.min(1, sr.width / (narrow ? 820 : 1180), sr.height / (narrow ? 1150 : 800));
     var scale = Math.max(0.4, lerp(sA, sE, d));
     // keep the composition centred as its footprint changes
     var cy = lerp(0, D / 2, c) * (1 - d);                       // lid lying behind -> shift forward
     var cz = -lerp(lerp(D * 0.35 * a, D * 0.05, c), 3 * g, d);  // tall stack -> pull down
-    var sy = lerp(14, 4, b) + lerp(0, 24, d);
+    var sy = lerp(14, 4, b) + lerp(0, narrow ? -46 : 24, d); // narrow: leave room for the legend
     mac.style.transform = 'translateY(' + sy + 'px) scale3d(' + scale + ',' + scale + ',' + scale + ') rotateX(' + rx + 'deg) rotateZ(' + rz + 'deg) translate3d(0,' + cy + 'px,' + cz + 'px)';
 
     // screen + highlights
@@ -311,7 +277,9 @@
       var pr = part.getBoundingClientRect();
       var y = pr.top + pr.height * 0.42 - sr.top - 9;
       if (l.classList.contains('right')) {
-        l.style.transform = 'translate(' + (pr.right - sr.left + 6) + 'px,' + y + 'px)';
+        var x = pr.right - sr.left + 6;
+        if (narrow) x = Math.min(x, sr.width - 56); // keep the number tag on screen
+        l.style.transform = 'translate(' + x + 'px,' + y + 'px)';
       } else {
         l.style.transform = 'translate(calc(' + (pr.left - sr.left - 6) + 'px - 100%),' + y + 'px)';
       }
@@ -319,9 +287,9 @@
     labelsBox.classList.toggle('legend-on', show);
 
     // progress readout
-    var n = Math.round(p * 20);
     var st = STAGES[Math.min(STAGES.length - 1, p < 0.02 ? 0 : p < 0.16 ? 1 : p < 0.32 ? 2 : p < 0.48 ? 3 : p < 0.78 ? 4 : 5)];
-    progEl.textContent = '[' + '█'.repeat(n) + '░'.repeat(20 - n) + '] ' + String(Math.round(p * 100)).padStart(3, ' ') + '%  ' + st;
+    progBar.style.width = (p * 100).toFixed(1) + '%';
+    if (progStage.textContent !== st) progStage.textContent = st;
     lastP = p;
   }
   function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(render); } }

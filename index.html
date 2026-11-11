@@ -3,55 +3,158 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>mfosec — web3 security · web app security · cross-platform apps</title>
-<meta name="description" content="mfosec: smart-contract audits, web application pentesting and cross-platform app development. We build websites and apps on demand." />
-<meta property="og:title" content="mfosec — break it, then build it right" />
-<meta property="og:description" content="Web3 security, web app security and cross-platform apps. Websites and apps built on demand." />
+<title>mfosec — Web3 security, web app security & cross-platform apps</title>
+<meta name="description" content="mfosec audits smart contracts, pentests web applications and builds cross-platform apps and websites on demand." />
+<meta property="og:title" content="mfosec — Break it first. Then build it right." />
+<meta property="og:description" content="Web3 security, web app security and cross-platform apps built on demand." />
 <meta property="og:url" content="https://mfosec.xyz" />
-<meta name="theme-color" content="#0a0a0a" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' font-weight='700' text-anchor='middle' fill='%23c6ff00'%3E%3E_%3C/text%3E%3C/svg%3E" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#09090b" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2309090b'/%3E%3Ctext x='16' y='21.5' font-family='monospace' font-size='15' font-weight='700' text-anchor='middle' fill='%23c6ff00'%3E%3E_%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-<canvas id="tide" aria-hidden="true"></canvas>
-<div class="scanlines" aria-hidden="true"></div>
 
-<nav class="topbar">
-  <a class="brand" href="#top"><span class="caret">&gt;_</span> mfosec</a>
-  <div class="links">
-    <a href="#teardown" data-i18n="nav.teardown">teardown</a>
-    <a href="#services" data-i18n="nav.services">services</a>
-    <a href="#work" data-i18n="nav.work">work</a>
-    <a href="#contact" data-i18n="nav.contact">contact</a>
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <a class="logo" href="#top" aria-label="mfosec home"><span class="logo-mark">&gt;_</span>mfosec</a>
+    <div class="nav-links">
+      <a href="#services" data-i18n="nav.services">Services</a>
+      <a href="#teardown" data-i18n="nav.teardown">Teardown</a>
+      <a href="#work" data-i18n="nav.work">Work</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </div>
+    <div class="nav-right">
+      <button class="lang" id="lang" type="button" aria-label="Switch language"><b data-l="en">EN</b><span>/</span><b data-l="tr">TR</b></button>
+      <a class="btn btn-sm btn-primary" href="mailto:mfos3c@proton.me?subject=New%20project" data-i18n="nav.cta">Start a project</a>
+    </div>
   </div>
-  <button class="lang" id="lang" type="button" aria-label="Switch language">[ <b data-l="en">EN</b> / <b data-l="tr">TR</b> ]</button>
 </nav>
 
 <!-- HERO -->
 <header class="hero" id="top">
-  <p class="prompt"><span class="u">mfosec@istanbul</span>:<span class="p">~</span>$ whoami<span class="blink">▌</span></p>
-  <pre class="banner" id="banner" aria-label="MFOSEC"></pre>
-  <p class="tagline" data-i18n="hero.tagline">web3 security · web app security · cross-platform apps</p>
-  <p class="lede" data-i18n="hero.lede">We break smart contracts and web apps for a living — and we build websites and apps on demand. iOS, Android, web and desktop from one codebase, security-reviewed before it ships.</p>
-  <div class="cta">
-    <a class="btn primary" href="mailto:mfos3c@proton.me?subject=New%20project" data-i18n="hero.cta1">start a project ↗</a>
-    <a class="btn" href="#services" data-i18n="hero.cta2">what we do</a>
+  <canvas id="tide" aria-hidden="true"></canvas>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Security research &amp; engineering studio · Istanbul</span></p>
+      <h1 data-i18n="hero.title">Break it first.<br><span class="muted-h">Then build it right.</span></h1>
+      <p class="lede" data-i18n="hero.lede">We audit smart contracts, pentest web applications and ship cross-platform apps on demand — every build reviewed by people who hunt bugs for a living.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="mailto:mfos3c@proton.me?subject=New%20project"><span data-i18n="hero.cta1">Start a project</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6"/></svg></a>
+        <a class="btn btn-ghost" href="#work" data-i18n="hero.cta2">See our work</a>
+      </div>
+      <div class="trust">
+        <span class="trust-label" data-i18n="hero.trust">Researcher on</span>
+        <ul>
+          <li>Cantina</li><li>Immunefi</li><li>HackenProof</li><li>HackerOne</li><li>Bugcrowd</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="window">
+        <div class="window-bar"><i></i><i></i><i></i><span>audit.log</span></div>
+        <pre class="window-body"><span class="c-mu">$</span> forge test --mt invariant_ -vv
+<span class="c-ok">[PASS]</span> invariant_solvency()         <span class="c-mu">runs: 256</span>
+<span class="c-ok">[PASS]</span> invariant_shareAccounting()  <span class="c-mu">runs: 256</span>
+<span class="c-bad">[FAIL]</span> test_residualDrain()
+       <span class="c-mu">└─ router balance  100,000 → 0</span>
+
+<span class="c-mu">$</span> ./report --severity critical
+<span class="c-ok">✓</span> root cause · PoC · fix diff
+<span class="c-ok">✓</span> retest scheduled
+
+<span class="c-mu">$</span> wrangler deploy
+<span class="c-ok">✓</span> live in 14s <span class="c-acc">▌</span></pre>
+      </div>
+      <div class="chip chip-a"><span class="sev-dot crit"></span><span data-i18n="hero.chip1">Critical finding · PoC attached</span></div>
+      <div class="chip chip-b"><span class="sev-dot ok"></span><span data-i18n="hero.chip2">iOS · Android · Web · Desktop</span></div>
+    </div>
   </div>
-  <a class="scroll-hint" href="#teardown"><span data-i18n="hero.scroll">scroll to disassemble</span> <span class="arrow">↓</span></a>
+  <div class="wrap stats">
+    <div><strong>7</strong><span data-i18n="st.1">bounty findings documented</span></div>
+    <div><strong>3</strong><span data-i18n="st.2">ecosystems — EVM, Cosmos, TON</span></div>
+    <div><strong>5</strong><span data-i18n="st.3">bug bounty platforms</span></div>
+    <div><strong>1</strong><span data-i18n="st.4">codebase for every screen</span></div>
+  </div>
 </header>
 
 <main>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker" data-i18n="svc.kicker">Services</p>
+      <h2 data-i18n="svc.title">Security and engineering under one roof.</h2>
+      <p class="sec-sub" data-i18n="svc.sub">Three disciplines that make each other better: we build like attackers think, and audit like engineers who ship.</p>
+    </div>
+
+    <div class="svc-grid">
+      <article class="svc">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3 data-i18n="c1.t">Web3 security</h3>
+        <p data-i18n="c1.d">Smart-contract audits and bug hunting across EVM, Cosmos and TON. Invariant fuzzing, economic attack modelling, runnable PoCs and fix reviews.</p>
+        <ul>
+          <li>Solidity · Yul · Go · FunC · Rust</li>
+          <li data-i18n="c1.l2">DeFi: DEX routers, lending, vaults, bridges, staking</li>
+          <li>Foundry · Echidna · Medusa · Halmos</li>
+          <li data-i18n="c1.l4">Proof of concept and remediation diff for every finding</li>
+        </ul>
+      </article>
+      <article class="svc">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 14l2 2-2 2M12 18h5"/></svg></div>
+        <h3 data-i18n="c2.t">Web app security</h3>
+        <p data-i18n="c2.d">Manual-first pentesting of web apps and APIs. Findings come with reproducible requests and clear fixes, not scanner noise.</p>
+        <ul>
+          <li data-i18n="c2.l1">AuthN/Z bypass · IDOR · SSRF</li>
+          <li data-i18n="c2.l2">Request smuggling · cache poisoning</li>
+          <li data-i18n="c2.l3">JWT / OAuth flaws · WAF bypass</li>
+          <li>Caido · Burp · nuclei · ffuf</li>
+        </ul>
+      </article>
+      <article class="svc">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="13" height="10" rx="1.5"/><rect x="16" y="8" width="6" height="12" rx="1.5"/><path d="M6 19h6M9 15v4"/></svg></div>
+        <h3 data-i18n="c3.t">Cross-platform apps</h3>
+        <p data-i18n="c3.d">One codebase, every screen. Native-feeling mobile apps, fast web apps and desktop builds, on a back end that scales.</p>
+        <ul>
+          <li>React Native · Next.js · Tauri</li>
+          <li>Supabase · Cloudflare Workers</li>
+          <li data-i18n="c3.l3">App Store &amp; Play Store releases</li>
+          <li data-i18n="c3.l4">Offline-first, role-based, secure by default</li>
+        </ul>
+      </article>
+    </div>
+
+    <article class="ondemand">
+      <div class="od-copy">
+        <p class="kicker" data-i18n="od.kicker">On demand</p>
+        <h3 data-i18n="od.title">Apps and websites, built to your brief.</h3>
+        <p data-i18n="od.text">A landing page, a SaaS dashboard, a mobile app, a Telegram mini app or a dApp front-end. We design it, build it, deploy it and keep it running — and it ships with a security review from the same people who do the audits.</p>
+        <a class="btn btn-primary" href="mailto:mfos3c@proton.me?subject=Project%20request"><span data-i18n="od.cta">Request a quote</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6"/></svg></a>
+      </div>
+      <ol class="steps">
+        <li><span class="n">01</span><div><strong data-i18n="od.s1">Brief</strong><em data-i18n="od.s1d">Goals, users, scope and timeline in one call.</em></div></li>
+        <li><span class="n">02</span><div><strong data-i18n="od.s2">Prototype</strong><em data-i18n="od.s2d">Clickable flows before a line of production code.</em></div></li>
+        <li><span class="n">03</span><div><strong data-i18n="od.s3">Build</strong><em data-i18n="od.s3d">Weekly releases you can try on your own devices.</em></div></li>
+        <li><span class="n">04</span><div><strong data-i18n="od.s4">Audit</strong><em data-i18n="od.s4d">Threat model and security review before launch.</em></div></li>
+        <li><span class="n">05</span><div><strong data-i18n="od.s5">Ship &amp; maintain</strong><em data-i18n="od.s5d">Store releases, monitoring and updates.</em></div></li>
+      </ol>
+    </article>
+  </div>
+</section>
+
 <!-- TEARDOWN: scroll-driven exploded MacBook -->
 <section class="teardown" id="teardown">
   <div class="td-sticky">
-    <div class="td-head">
-      <p class="prompt">$ ./teardown.sh --device macbook --verbose</p>
+    <div class="wrap td-head">
+      <p class="kicker" data-i18n="td.kicker">Teardown</p>
       <h2 data-i18n="td.title">What's inside every build.</h2>
-      <p class="sub" data-i18n="td.sub">Scroll to take it apart. Every layer is something we do.</p>
-      <p class="td-progress" id="tdProgress" aria-hidden="true">[░░░░░░░░░░░░░░░░░░░░] 0%  booting</p>
+      <p class="sec-sub" data-i18n="td.sub">Scroll to take it apart. Every layer is something we do.</p>
+      <div class="td-progress" aria-hidden="true"><span class="bar"><i id="tdBar"></i></span><span id="tdStage">booting</span></div>
     </div>
     <div class="stage" id="stage">
       <div class="mac" id="mac">
@@ -70,216 +173,166 @@
           <div class="part p-panel" data-part="panel"><pre class="ascii" data-gen="panel"></pre></div>
           <div class="part p-glass" data-part="glass">
             <div class="term">
-              <div class="term-bar"><i></i><i></i><i></i><span>mfosec — zsh — 80×24</span></div>
+              <div class="term-bar"><i></i><i></i><i></i><span>mfosec — zsh</span></div>
               <pre class="term-body" id="term"></pre>
             </div>
           </div>
         </div>
       </div>
       <div class="labels" id="labels">
-        <div class="label left" data-for="glass"><b>01</b><span><strong data-i18n="l.glass.t">screen → on-demand builds</strong><em data-i18n="l.glass.d">websites &amp; apps, built to your brief</em></span></div>
-        <div class="label left" data-for="panel"><b>02</b><span><strong data-i18n="l.panel.t">display → cross-platform UI</strong><em data-i18n="l.panel.d">one codebase: iOS · Android · web · desktop</em></span></div>
-        <div class="label left" data-for="shell"><b>03</b><span><strong data-i18n="l.shell.t">chassis → product &amp; design</strong><em data-i18n="l.shell.d">UX, brand, landing pages that convert</em></span></div>
-        <div class="label right" data-for="deck"><b>04</b><span><strong data-i18n="l.deck.t">keyboard → web app security</strong><em data-i18n="l.deck.d">every keystroke is untrusted input</em></span></div>
-        <div class="label right" data-for="board"><b>05</b><span><strong data-i18n="l.board.t">logic board → web3 security</strong><em data-i18n="l.board.d">the contracts that hold the value</em></span></div>
-        <div class="label right" data-for="battery"><b>06</b><span><strong data-i18n="l.battery.t">battery → infra &amp; deploy</strong><em data-i18n="l.battery.d">Cloudflare Workers · Supabase · CI/CD</em></span></div>
-        <div class="label right" data-for="bottom"><b>07</b><span><strong data-i18n="l.bottom.t">bottom case → hardening</strong><em data-i18n="l.bottom.d">threat models, reviews, retests</em></span></div>
+        <div class="label left" data-for="glass"><b>01</b><span><strong data-i18n="l.glass.t">Screen — on-demand builds</strong><em data-i18n="l.glass.d">Websites &amp; apps, built to your brief</em></span></div>
+        <div class="label left" data-for="panel"><b>02</b><span><strong data-i18n="l.panel.t">Display — cross-platform UI</strong><em data-i18n="l.panel.d">iOS · Android · web · desktop</em></span></div>
+        <div class="label left" data-for="shell"><b>03</b><span><strong data-i18n="l.shell.t">Chassis — product &amp; design</strong><em data-i18n="l.shell.d">UX, brand, pages that convert</em></span></div>
+        <div class="label right" data-for="deck"><b>04</b><span><strong data-i18n="l.deck.t">Keyboard — web app security</strong><em data-i18n="l.deck.d">Every keystroke is untrusted input</em></span></div>
+        <div class="label right" data-for="board"><b>05</b><span><strong data-i18n="l.board.t">Logic board — web3 security</strong><em data-i18n="l.board.d">The contracts that hold the value</em></span></div>
+        <div class="label right" data-for="battery"><b>06</b><span><strong data-i18n="l.battery.t">Battery — infra &amp; deploy</strong><em data-i18n="l.battery.d">Cloudflare Workers · Supabase · CI/CD</em></span></div>
+        <div class="label right" data-for="bottom"><b>07</b><span><strong data-i18n="l.bottom.t">Bottom case — hardening</strong><em data-i18n="l.bottom.d">Threat models, reviews, retests</em></span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section class="section" id="services">
-  <div class="sec-head"><span class="idx">02</span><h2 data-i18n="svc.title">services</h2><span class="rule" aria-hidden="true"></span><code>ls -la ./services</code></div>
-
-  <article class="ondemand">
-    <pre class="od-art" aria-hidden="true">
-  ┌──────────────────────┐
-  │ ● ● ●   your-app.tsx │
-  ├──────────────────────┤
-  │ &gt; idea ............ ✓ │
-  │ &gt; prototype ....... ✓ │
-  │ &gt; build ........... ✓ │
-  │ &gt; audit ........... ✓ │
-  │ &gt; ship ............ ▌ │
-  └──────────────────────┘</pre>
-    <div>
-      <p class="kicker" data-i18n="od.kicker">// on demand</p>
-      <h3 data-i18n="od.title">Apps &amp; websites, built on demand.</h3>
-      <p data-i18n="od.text">Tell us what you need — a landing page, a SaaS dashboard, a mobile app, a Telegram mini app or a dApp front-end. We design it, build it, deploy it and keep it running. Every build ships with a security review by the same people who do the audits.</p>
-      <ol class="steps">
-        <li><b>01</b> <span data-i18n="od.s1">brief</span></li>
-        <li><b>02</b> <span data-i18n="od.s2">prototype</span></li>
-        <li><b>03</b> <span data-i18n="od.s3">build</span></li>
-        <li><b>04</b> <span data-i18n="od.s4">audit</span></li>
-        <li><b>05</b> <span data-i18n="od.s5">ship &amp; maintain</span></li>
-      </ol>
-      <a class="btn primary" href="mailto:mfos3c@proton.me?subject=Project%20request" data-i18n="od.cta">request a quote ↗</a>
-    </div>
-  </article>
-
-  <div class="cards">
-    <article class="card">
-      <pre class="card-art" aria-hidden="true">  ⟠
- /◇\
- \◇/
-  ▼ </pre>
-      <h3 data-i18n="c1.t">web3 security</h3>
-      <p data-i18n="c1.d">Smart-contract audits and bug hunting across EVM and Solana. Invariant fuzzing, economic attack modelling, runnable PoCs and fix reviews.</p>
-      <ul>
-        <li>Solidity · Yul · Rust / Anchor</li>
-        <li data-i18n="c1.l2">DeFi: AMMs, lending, ERC-4626 vaults, bridges</li>
-        <li>Foundry · Echidna · Medusa · Halmos</li>
-        <li data-i18n="c1.l4">PoC + remediation diff for every finding</li>
-      </ul>
-    </article>
-    <article class="card">
-      <pre class="card-art" aria-hidden="true">┌───┐
-│403│→200
-└───┘
- GET </pre>
-      <h3 data-i18n="c2.t">web app security</h3>
-      <p data-i18n="c2.d">Manual-first pentesting of web apps and APIs. Findings come with reproducible requests and clear fixes, not scanner noise.</p>
-      <ul>
-        <li data-i18n="c2.l1">authN/Z bypass · IDOR · SSRF</li>
-        <li data-i18n="c2.l2">request smuggling · cache poisoning</li>
-        <li data-i18n="c2.l3">JWT / OAuth flaws · WAF bypass</li>
-        <li>Caido · Burp · nuclei · ffuf</li>
-      </ul>
-    </article>
-    <article class="card">
-      <pre class="card-art" aria-hidden="true">▯ ▭ ▢
- \│/
- {/}
-codebase</pre>
-      <h3 data-i18n="c3.t">cross-platform apps</h3>
-      <p data-i18n="c3.d">One codebase, every screen. Native-feeling mobile apps, fast web apps and desktop builds, with a back end that scales.</p>
-      <ul>
-        <li>React Native · Expo · Next.js · Tauri</li>
-        <li>Supabase · Cloudflare Workers</li>
-        <li data-i18n="c3.l3">App Store &amp; Play Store releases</li>
-        <li data-i18n="c3.l4">Telegram mini apps · dApp front-ends</li>
-      </ul>
-    </article>
-  </div>
-</section>
-
 <!-- WORK -->
 <section class="section" id="work">
-  <div class="sec-head"><span class="idx">03</span><h2 data-i18n="work.title">work</h2><span class="rule" aria-hidden="true"></span><code>cat experience.log</code></div>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker" data-i18n="work.kicker">Work</p>
+      <h2 data-i18n="bb.title">Bug bounty experience.</h2>
+      <p class="sec-sub" data-i18n="bb.lede">Smart-contract and protocol findings submitted to public programs on Cantina, Immunefi and HackenProof — each with a runnable proof of concept.</p>
+    </div>
 
-  <h3 class="sub-head"><span class="kicker">// </span><span data-i18n="bb.title">bug bounty experience</span></h3>
-  <p class="sub-lede" data-i18n="bb.lede">Smart-contract and protocol findings submitted to public bug bounty programs on Cantina, Immunefi and HackenProof — each with a runnable proof of concept. Across EVM, Cosmos SDK (Go) and TON (FunC).</p>
-  <div class="bb">
-    <div class="bb-row bb-headrow" aria-hidden="true"><span data-i18n="bb.h1">sev</span><span data-i18n="bb.h2">program</span><span data-i18n="bb.h3">finding</span><span data-i18n="bb.h4">stack</span><span data-i18n="bb.h5">platform</span></div>
-    <div class="bb-row">
-      <span class="sev crit">critical</span>
-      <span class="prog">OKX Labs <em>DEX router</em></span>
-      <span class="find" data-i18n="bb.f1">Unrestricted public swap entry point lets anyone route the router's residual ERC20 balance to themselves</span>
-      <span class="stk">solidity</span>
-      <span class="plat">cantina · <i data-i18n="bb.dup">dup</i></span>
+    <div class="bb" role="table" aria-label="Bug bounty findings">
+      <div class="bb-row bb-headrow" role="row"><span data-i18n="bb.h1">Severity</span><span data-i18n="bb.h2">Program</span><span data-i18n="bb.h3">Finding</span><span data-i18n="bb.h4">Stack</span><span data-i18n="bb.h5">Platform</span></div>
+      <div class="bb-row" role="row">
+        <span><i class="sev crit">Critical</i></span>
+        <span class="prog">OKX Labs<em>DEX router</em></span>
+        <span class="find" data-i18n="bb.f1">Unrestricted public swap entry point lets anyone route the router's residual ERC20 balance to themselves</span>
+        <span class="stk">Solidity</span>
+        <span class="plat">Cantina<i class="dup" data-i18n="bb.dup">dup</i></span>
+      </div>
+      <div class="bb-row" role="row">
+        <span><i class="sev crit">Critical</i></span>
+        <span class="prog">OKX Labs<em>DEX router</em></span>
+        <span class="find" data-i18n="bb.f2">Commission library pays the referrer the router's full token balance instead of only the pulled commission</span>
+        <span class="stk">Solidity · Yul</span>
+        <span class="plat">Cantina<i class="dup" data-i18n="bb.dup">dup</i></span>
+      </div>
+      <div class="bb-row" role="row">
+        <span><i class="sev high">High</i></span>
+        <span class="prog">dYdX<em>v4 chain</em></span>
+        <span class="find" data-i18n="bb.f3">Float64 precision loss in market listing makes atomicResolution off by one — permanent 10× wrong margins in permissionless markets</span>
+        <span class="stk">Go · Cosmos</span>
+        <span class="plat">Cantina<i class="dup" data-i18n="bb.dup">dup</i></span>
+      </div>
+      <div class="bb-row" role="row">
+        <span><i class="sev high">High</i></span>
+        <span class="prog">SSV Network<em>staking</em></span>
+        <span class="find" data-i18n="bb.f4">Operator removal with active validators orphans them — permanent freezing of staked ETH</span>
+        <span class="stk">Solidity</span>
+        <span class="plat">Immunefi<i class="dup" data-i18n="bb.dup">dup</i></span>
+      </div>
+      <div class="bb-row" role="row">
+        <span><i class="sev high">High</i></span>
+        <span class="prog">Whitechain<em>bridge</em></span>
+        <span class="find" data-i18n="bb.f5">Relayer ECDSA hash omits the mapping id — a signature for one token mapping is replayable on another</span>
+        <span class="stk">Solidity</span>
+        <span class="plat">HackenProof<i class="dup" data-i18n="bb.dup">dup</i></span>
+      </div>
+      <div class="bb-row" role="row">
+        <span><i class="sev na">—</i></span>
+        <span class="prog">STON.fi<em>DEX v2</em></span>
+        <span class="find" data-i18n="bb.f6">Pool and router silently drop bounced messages — reserves desync and funds are orphaned on failed transfers</span>
+        <span class="stk">FunC · TON</span>
+        <span class="plat">HackenProof<i class="dup" data-i18n="bb.dup">dup</i></span>
+      </div>
+      <div class="bb-row" role="row">
+        <span><i class="sev med">Medium</i></span>
+        <span class="prog">Veda<em>BoringVault</em></span>
+        <span class="find" data-i18n="bb.f7">depositAndBridge always reverts when a share lock is set — 32 affected teller configs</span>
+        <span class="stk">Solidity</span>
+        <span class="plat"><a href="https://github.com/mfos3c/veda-boringvault-h01-poc" target="_blank" rel="noopener">PoC ↗</a></span>
+      </div>
     </div>
-    <div class="bb-row">
-      <span class="sev crit">critical</span>
-      <span class="prog">OKX Labs <em>DEX router</em></span>
-      <span class="find" data-i18n="bb.f2">Commission library pays the referrer the router's full token balance instead of only the pulled commission</span>
-      <span class="stk">solidity · yul</span>
-      <span class="plat">cantina · <i data-i18n="bb.dup">dup</i></span>
-    </div>
-    <div class="bb-row">
-      <span class="sev high">high</span>
-      <span class="prog">dYdX <em>v4 chain</em></span>
-      <span class="find" data-i18n="bb.f3">Float64 precision loss in market listing makes atomicResolution off by one — permanent 10× wrong margins in permissionless markets</span>
-      <span class="stk">go · cosmos</span>
-      <span class="plat">cantina · <i data-i18n="bb.dup">dup</i></span>
-    </div>
-    <div class="bb-row">
-      <span class="sev high">high</span>
-      <span class="prog">SSV Network</span>
-      <span class="find" data-i18n="bb.f4">Operator removal with active validators orphans them — permanent freezing of staked ETH</span>
-      <span class="stk">solidity · staking</span>
-      <span class="plat">immunefi · <i data-i18n="bb.dup">dup</i></span>
-    </div>
-    <div class="bb-row">
-      <span class="sev high">high</span>
-      <span class="prog">Whitechain <em>bridge</em></span>
-      <span class="find" data-i18n="bb.f5">Relayer ECDSA hash omits the mapping id — a signature for one token mapping is replayable on another</span>
-      <span class="stk">solidity · bridge</span>
-      <span class="plat">hackenproof · <i data-i18n="bb.dup">dup</i></span>
-    </div>
-    <div class="bb-row">
-      <span class="sev na">—</span>
-      <span class="prog">STON.fi <em>DEX v2</em></span>
-      <span class="find" data-i18n="bb.f6">Pool and router silently drop bounced messages — reserves desync and funds are orphaned on failed transfers</span>
-      <span class="stk">func · ton</span>
-      <span class="plat">hackenproof · <i data-i18n="bb.dup">dup</i></span>
-    </div>
-    <div class="bb-row">
-      <span class="sev med">medium</span>
-      <span class="prog">Veda <em>BoringVault</em></span>
-      <span class="find" data-i18n="bb.f7">depositAndBridge always reverts when a share lock is set — 32 affected teller configs</span>
-      <span class="stk">solidity · foundry</span>
-      <span class="plat"><a href="https://github.com/mfos3c/veda-boringvault-h01-poc" target="_blank" rel="noopener">poc ↗</a></span>
-    </div>
+    <p class="bb-note" data-i18n="bb.note">dup = confirmed valid by triage, but another researcher reported it first. Contract addresses and PoCs are withheld.</p>
+
+    <article class="case">
+      <div class="case-copy">
+        <p class="kicker" data-i18n="pj.kicker">Case study · Auto parts</p>
+        <h3>Uzmanlar Depo</h3>
+        <p data-i18n="pj.text">Stock-counting and accounting app for an auto parts depot. Staff scan QR labels on a handheld Android terminal, count shelves offline and sync when back online; the office runs the same data on a desktop app. Supabase is the single source of truth, with per-employee roles.</p>
+        <ul class="case-feats">
+          <li data-i18n="pj.f1">QR / camera stock counting, works offline</li>
+          <li data-i18n="pj.f2">Parts catalog with photos and OEM numbers</li>
+          <li data-i18n="pj.f3">Stock movements, valuation and accounting</li>
+          <li data-i18n="pj.f4">Mobile + desktop from one TypeScript core</li>
+        </ul>
+        <div class="tags"><span>React Native</span><span>Tauri 2</span><span>React / Vite</span><span>Supabase</span><span>SQLite</span></div>
+      </div>
+      <div class="case-visual" aria-hidden="true">
+        <div class="desk">
+          <div class="window-bar"><i></i><i></i><i></i><span>Uzmanlar Depo — Stok</span></div>
+          <div class="desk-body">
+            <div class="desk-side"><b></b><b class="on"></b><b></b><b></b></div>
+            <div class="desk-main">
+              <div class="kpis"><div><em data-i18n="pj.k1">Parts</em><strong>1,248</strong></div><div><em data-i18n="pj.k2">Counted</em><strong>86%</strong></div><div><em data-i18n="pj.k3">Locations</em><strong>42</strong></div></div>
+              <div class="rows">
+                <div><span>Tork konvertörü</span><span>×3</span></div>
+                <div><span>ABS / SBC beyni</span><span>×1</span></div>
+                <div><span>Turbo</span><span>×2</span></div>
+                <div><span>Yağ pompası</span><span>×4</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-scan"><div class="qr"></div><span data-i18n="pj.scan">Scanning…</span></div>
+          <div class="phone-row"><span>Turbo</span><b>+1</b></div>
+          <div class="phone-btn" data-i18n="pj.save">Save count</div>
+        </div>
+      </div>
+    </article>
   </div>
-  <p class="bb-note" data-i18n="bb.note">dup = confirmed valid by triage, but another researcher reported it first. Contract addresses and PoCs are withheld.</p>
-
-  <h3 class="sub-head"><span class="kicker">// </span><span data-i18n="pj.title">featured build</span></h3>
-  <article class="project">
-    <pre class="pj-art" aria-hidden="true">┌────────────────────┐
-│ ▣ UZMANLAR DEPO    │
-├────────────────────┤
-│ tork konv.     x3  │
-│ abs beyni      x1  │
-│ turbo          x2  │
-│ ▒▒▒▒▒▒▒▒░░░ sayım  │
-├────────────────────┤
-│ [QR] [+] [-] [TL]  │
-└────────────────────┘</pre>
-    <div>
-      <p class="kicker" data-i18n="pj.kicker">// client · auto parts</p>
-      <h3>Uzmanlar Depo</h3>
-      <p data-i18n="pj.text">Stock-counting and accounting app for an auto parts depot. Staff scan QR labels on a handheld Android terminal, count shelves offline and sync when back online; the office runs the same data on a desktop app. Supabase is the single source of truth, with per-employee roles.</p>
-      <ul class="pj-feats">
-        <li data-i18n="pj.f1">QR / camera stock counting, works offline</li>
-        <li data-i18n="pj.f2">parts catalog with photos and OEM numbers</li>
-        <li data-i18n="pj.f3">stock movements, valuation and accounting</li>
-        <li data-i18n="pj.f4">mobile + desktop from one shared TypeScript core</li>
-      </ul>
-      <p class="pj-stack">react native · tauri 2 · react/vite · supabase · sqlite</p>
-    </div>
-  </article>
 </section>
 
 <!-- CONTACT -->
 <section class="section" id="contact">
-  <div class="sec-head"><span class="idx">04</span><h2 data-i18n="ct.title">contact</h2><span class="rule" aria-hidden="true"></span><code>gpg --verify</code></div>
-  <div class="contact">
-    <div>
-      <h3 class="big" data-i18n="ct.big">Need it audited, or need it built?</h3>
-      <p data-i18n="ct.text">Send the scope, the repo or the idea, and a rough timeline. We reply within a day.</p>
-      <a class="mail" href="mailto:mfos3c@proton.me">mfos3c@proton.me</a>
+  <div class="wrap">
+    <div class="cta-panel">
+      <div>
+        <p class="kicker" data-i18n="ct.kicker">Contact</p>
+        <h2 data-i18n="ct.big">Have a protocol to audit or a product to build?</h2>
+        <p class="sec-sub" data-i18n="ct.text">Send the scope, the repo or the idea, and a rough timeline. We reply within a day.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="mailto:mfos3c@proton.me"><span>mfos3c@proton.me</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6"/></svg></a>
+        </div>
+      </div>
+      <ul class="socials">
+        <li><a href="https://github.com/mfos3c" target="_blank" rel="noopener"><span>GitHub</span><em>mfos3c</em></a></li>
+        <li><a href="https://x.com/mfosec" target="_blank" rel="noopener"><span>X</span><em>mfosec</em></a></li>
+        <li><a href="https://cantina.xyz/u/mfosec" target="_blank" rel="noopener"><span>Cantina</span><em>mfosec</em></a></li>
+        <li><a href="https://hackerone.com/mfosec?type=user" target="_blank" rel="noopener"><span>HackerOne</span><em>mfosec</em></a></li>
+        <li><a href="https://hackenproof.com/hackers/mfosec" target="_blank" rel="noopener"><span>HackenProof</span><em>mfosec</em></a></li>
+        <li><a href="https://bugcrowd.com/h/fatihoztekin" target="_blank" rel="noopener"><span>Bugcrowd</span><em>fatihoztekin</em></a></li>
+      </ul>
     </div>
-    <ul class="socials">
-      <li><a href="https://github.com/mfos3c" target="_blank" rel="noopener"><span>github</span>/mfos3c</a></li>
-      <li><a href="https://x.com/mfosec" target="_blank" rel="noopener"><span>x</span>/mfosec</a></li>
-      <li><a href="https://cantina.xyz/u/mfosec" target="_blank" rel="noopener"><span>cantina</span>/mfosec</a></li>
-      <li><a href="https://hackerone.com/mfosec?type=user" target="_blank" rel="noopener"><span>hackerone</span>/mfosec</a></li>
-      <li><a href="https://hackenproof.com/hackers/mfosec" target="_blank" rel="noopener"><span>hackenproof</span>/mfosec</a></li>
-      <li><a href="https://bugcrowd.com/h/fatihoztekin" target="_blank" rel="noopener"><span>bugcrowd</span>/fatihoztekin</a></li>
-    </ul>
   </div>
 </section>
 </main>
 
 <footer class="foot">
-  <span>© <span id="yr">2026</span> mfosec · istanbul</span>
-  <span data-i18n="foot.credit">ASCII effects adapted from 21st.dev community components (Background ASCII Plasma, Text ASCII Cascade by @nikolas-sapa)</span>
-  <span>static · cloudflare workers</span>
+  <div class="wrap">
+    <pre class="wordmark" id="wordmark" aria-label="MFOSEC"></pre>
+    <div class="foot-row">
+      <span>© <span id="yr">2026</span> mfosec · Istanbul</span>
+      <span data-i18n="foot.credit">ASCII effects adapted from 21st.dev community components by @nikolas-sapa</span>
+      <a href="#top" data-i18n="foot.top">Back to top ↑</a>
+    </div>
+  </div>
 </footer>
 
 <script src="assets/ascii.js"></script>
+<script src="assets/i18n-tr.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

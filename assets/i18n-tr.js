@@ -1,0 +1,61 @@
+/* Turkish copy. Keys match data-i18n attributes in index.html (English is the inline default). */
+window.I18N_TR = {
+  'nav.services': 'Hizmetler', 'nav.teardown': 'Söküm', 'nav.work': 'İşler', 'nav.contact': 'İletişim', 'nav.cta': 'Proje başlat',
+
+  'hero.eyebrow': 'Güvenlik araştırması ve yazılım stüdyosu · İstanbul',
+  'hero.title': 'Önce kır.<br><span class="muted-h">Sonra doğru inşa et.</span>',
+  'hero.lede': 'Akıllı kontratları denetliyor, web uygulamalarına sızma testi yapıyor ve isteğe bağlı çapraz platform uygulamalar geliştiriyoruz — her proje, işi bug avlamak olan ekip tarafından incelenir.',
+  'hero.cta1': 'Proje başlat', 'hero.cta2': 'İşlerimizi gör', 'hero.trust': 'Araştırmacı olarak',
+  'hero.chip1': 'Kritik bulgu · PoC ekli', 'hero.chip2': 'iOS · Android · Web · Masaüstü',
+  'st.1': 'belgelenmiş bounty bulgusu', 'st.2': 'ekosistem — EVM, Cosmos, TON', 'st.3': 'bug bounty platformu', 'st.4': 'kod tabanı, her ekran için',
+
+  'svc.kicker': 'Hizmetler', 'svc.title': 'Güvenlik ve yazılım tek çatı altında.',
+  'svc.sub': 'Birbirini güçlendiren üç disiplin: saldırgan gibi düşünerek geliştiriyor, yayına çıkaran mühendisler gibi denetliyoruz.',
+  'c1.t': 'Web3 güvenliği', 'c1.d': 'EVM, Cosmos ve TON üzerinde akıllı kontrat denetimi ve bug avcılığı. Invariant fuzzing, ekonomik saldırı modelleme, çalışan PoC\'ler ve düzeltme incelemesi.',
+  'c1.l2': 'DeFi: DEX router, lending, vault, köprü, staking', 'c1.l4': 'Her bulgu için PoC ve düzeltme diff\'i',
+  'c2.t': 'Web uygulama güvenliği', 'c2.d': 'Web uygulamaları ve API\'ler için manuel ağırlıklı sızma testi. Bulgular tarayıcı gürültüsüyle değil, tekrar üretilebilir istekler ve net düzeltmelerle gelir.',
+  'c2.l1': 'AuthN/Z bypass · IDOR · SSRF', 'c2.l2': 'Request smuggling · cache poisoning', 'c2.l3': 'JWT / OAuth açıkları · WAF bypass',
+  'c3.t': 'Çapraz platform uygulamalar', 'c3.d': 'Tek kod tabanı, her ekran. Native hissettiren mobil uygulamalar, hızlı web uygulamaları ve masaüstü sürümler; ölçeklenen bir backend ile.',
+  'c3.l3': 'App Store ve Play Store yayını', 'c3.l4': 'Çevrimdışı öncelikli, rol tabanlı, varsayılan olarak güvenli',
+
+  'od.kicker': 'İsteğe bağlı', 'od.title': 'Brifine göre uygulama ve web siteleri.',
+  'od.text': 'Bir tanıtım sayfası, SaaS paneli, mobil uygulama, Telegram mini app ya da dApp arayüzü. Tasarlıyor, geliştiriyor, yayına alıyor ve çalışır halde tutuyoruz — ve her proje, denetimleri yapan ekibin güvenlik incelemesinden geçerek yayına çıkar.',
+  'od.cta': 'Teklif iste',
+  'od.s1': 'Brif', 'od.s1d': 'Hedefler, kullanıcılar, kapsam ve takvim tek görüşmede.',
+  'od.s2': 'Prototip', 'od.s2d': 'Tek satır üretim kodundan önce tıklanabilir akışlar.',
+  'od.s3': 'Geliştirme', 'od.s3d': 'Kendi cihazlarında deneyebileceğin haftalık sürümler.',
+  'od.s4': 'Denetim', 'od.s4d': 'Yayından önce tehdit modeli ve güvenlik incelemesi.',
+  'od.s5': 'Yayın ve bakım', 'od.s5d': 'Mağaza yayınları, izleme ve güncellemeler.',
+
+  'td.kicker': 'Söküm', 'td.title': 'Her projenin içinde ne var?', 'td.sub': 'Kaydırarak parçalarına ayır. Her katman yaptığımız bir iş.',
+  'l.glass.t': 'Ekran — isteğe bağlı geliştirme', 'l.glass.d': 'Brifine göre web sitesi ve uygulama',
+  'l.panel.t': 'Panel — çapraz platform arayüz', 'l.panel.d': 'iOS · Android · web · masaüstü',
+  'l.shell.t': 'Kasa — ürün ve tasarım', 'l.shell.d': 'UX, marka, dönüşüm getiren sayfalar',
+  'l.deck.t': 'Klavye — web uygulama güvenliği', 'l.deck.d': 'Her tuş vuruşu güvenilmeyen girdidir',
+  'l.board.t': 'Anakart — web3 güvenliği', 'l.board.d': 'Değeri tutan kontratlar',
+  'l.battery.t': 'Batarya — altyapı ve yayın', 'l.battery.d': 'Cloudflare Workers · Supabase · CI/CD',
+  'l.bottom.t': 'Alt kasa — sıkılaştırma', 'l.bottom.d': 'Tehdit modeli, inceleme, yeniden test',
+
+  'work.kicker': 'İşler', 'bb.title': 'Bug bounty tecrübesi.',
+  'bb.lede': 'Cantina, Immunefi ve HackenProof\'taki açık programlara gönderilen akıllı kontrat ve protokol bulguları — her biri çalışan bir PoC ile.',
+  'bb.h1': 'Seviye', 'bb.h2': 'Program', 'bb.h3': 'Bulgu', 'bb.h4': 'Teknoloji', 'bb.h5': 'Platform', 'bb.dup': 'dup',
+  'bb.f1': 'Kısıtlamasız public swap fonksiyonu, router\'da kalan ERC20 bakiyesini herkesin kendine aktarmasına izin veriyor',
+  'bb.f2': 'Komisyon kütüphanesi referrer\'a sadece çekilen komisyonu değil router\'ın tüm token bakiyesini gönderiyor',
+  'bb.f3': 'Market listelemede float64 hassasiyet kaybı atomicResolution\'ı bir kaydırıyor — izinsiz marketlerde kalıcı 10× yanlış teminat',
+  'bb.f4': 'Aktif validator\'ı olan operatörün silinmesi validator\'ları sahipsiz bırakıyor — stake edilmiş ETH kalıcı olarak donuyor',
+  'bb.f5': 'Relayer ECDSA hash\'i mapping id\'yi içermiyor — bir token eşlemesi için verilen imza başka eşlemede tekrar kullanılabiliyor',
+  'bb.f6': 'Pool ve router geri dönen (bounce) mesajları sessizce yutuyor — başarısız transferlerde rezervler bozuluyor, fonlar sahipsiz kalıyor',
+  'bb.f7': 'Share lock açıkken depositAndBridge her zaman revert ediyor — 32 etkilenen teller konfigürasyonu',
+  'bb.note': 'dup = triage tarafından geçerli bulundu, ancak başka bir araştırmacı daha önce raporlamıştı. Kontrat adresleri ve PoC\'ler paylaşılmıyor.',
+
+  'pj.kicker': 'Vaka çalışması · Yedek parça',
+  'pj.text': 'Bir yedek parça deposu için stok sayım ve muhasebe uygulaması. Çalışanlar Android el terminaliyle QR etiketleri okutup rafları çevrimdışı sayıyor, bağlantı gelince senkronize ediliyor; ofis aynı veriyi masaüstü uygulamasından yönetiyor. Supabase tek doğruluk kaynağı, çalışan bazlı yetkilerle.',
+  'pj.f1': 'QR / kamera ile stok sayımı, çevrimdışı çalışır', 'pj.f2': 'Fotoğraflı ve OEM numaralı parça kataloğu',
+  'pj.f3': 'Stok hareketleri, değerleme ve muhasebe', 'pj.f4': 'Tek TypeScript çekirdekten mobil + masaüstü',
+  'pj.k1': 'Parça', 'pj.k2': 'Sayıldı', 'pj.k3': 'Lokasyon', 'pj.scan': 'Taranıyor…', 'pj.save': 'Sayımı kaydet',
+
+  'ct.kicker': 'İletişim', 'ct.big': 'Denetlenecek bir protokol ya da yapılacak bir ürün mü var?',
+  'ct.text': 'Kapsamı, repoyu ya da fikri ve kabaca bir takvimi gönder. Bir gün içinde dönüş yapıyoruz.',
+  'foot.credit': 'ASCII efektleri @nikolas-sapa\'nın 21st.dev topluluk bileşenlerinden uyarlandı',
+  'foot.top': 'Başa dön ↑'
+};

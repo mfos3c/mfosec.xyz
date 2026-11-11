@@ -86,7 +86,8 @@
 
     function resize() {
       var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      var w = Math.round(window.innerWidth * dpr), h = Math.round(window.innerHeight * dpr);
+      var box = canvas.getBoundingClientRect();
+      var w = Math.max(1, Math.round(box.width * dpr)), h = Math.max(1, Math.round(box.height * dpr));
       canvas.width = w; canvas.height = h;
       gl.viewport(0, 0, w, h);
       var cs = getComputedStyle(canvas), size = cellSize * dpr;
@@ -130,18 +131,22 @@
       cur.energy *= Math.exp(-step / WARP_TAU);
       draw();
     }
-    function start() { if (!raf && !reducedMotion && !document.hidden) { last = 0; acc = FRAME_MS; raf = requestAnimationFrame(loop); } }
+    var active = true;
+    function start() { if (active && !raf && !reducedMotion && !document.hidden) { last = 0; acc = FRAME_MS; raf = requestAnimationFrame(loop); } }
     function stop() { cancelAnimationFrame(raf); raf = 0; }
+    function setActive(on) { active = on; if (on) start(); else stop(); }
     window.addEventListener('pointermove', function (e) {
-      if (cur.tx > -1e4) cur.energy = Math.min(1, cur.energy + Math.hypot(e.clientX - cur.tx, e.clientY - cur.ty) * ENERGY_GAIN * 0.02);
-      cur.tx = e.clientX; cur.ty = e.clientY;
+      if (!active) return;
+      var box = canvas.getBoundingClientRect(), x = e.clientX - box.left, y = e.clientY - box.top;
+      if (cur.tx > -1e4) cur.energy = Math.min(1, cur.energy + Math.hypot(x - cur.tx, y - cur.ty) * ENERGY_GAIN * 0.02);
+      cur.tx = x; cur.ty = y;
     }, { passive: true });
     var rt = null;
     window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { resize(); draw(); }, 150); });
     document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
     canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); stop(); });
     document.fonts.ready.then(function () { resize(); draw(); start(); });
-    return { start: start, stop: stop, gl: true };
+    return { start: start, stop: stop, setActive: setActive, gl: true };
   }
 
   function glyphTide(canvas, opts) {
@@ -265,7 +270,7 @@
     document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
     document.fonts.ready.then(function () { resize(); draw(); start(); });
 
-    return { start: start, stop: stop };
+    return { start: start, stop: stop, setActive: function () {} };
   }
 
   /* ------------------------------------------------------------------ */
