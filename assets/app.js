@@ -298,4 +298,94 @@
 
   setLang(lang);
   render();
+
+  /* ------------------------------------------------------------------ */
+  /* Scroll motion: reveals, parallax, counters, progress, video scrub   */
+  /* ------------------------------------------------------------------ */
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 1) reveal-on-scroll with per-group stagger
+  var REVEAL = [
+    ['.hero-copy > *', 90], ['.hero-visual', 0], ['.stats > div', 90],
+    ['.sec-head > *', 80], ['.svc', 110], ['.od-copy > *', 70], ['.steps li', 80],
+    ['.td-head > *', 70], ['.bb-row', 55], ['.bb-note', 0], ['.case-copy > *', 70], ['.case-visual', 0],
+    ['.cta-panel > div > *', 70], ['.socials li', 50], ['.foot-row', 0]
+  ];
+  var revealEls = [];
+  REVEAL.forEach(function (r) {
+    var groups = new Map();
+    $$(r[0]).forEach(function (el) {
+      var g = groups.get(el.parentNode) || 0;
+      groups.set(el.parentNode, g + 1);
+      el.classList.add('rv');
+      el.style.setProperty('--d', Math.min(g * r[1], 480) + 'ms');
+      revealEls.push(el);
+    });
+  });
+  function counter(el) {
+    var target = parseInt(el.dataset.to, 10), t0 = performance.now(), dur = 1100;
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(target * e);
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  $$('.stats strong').forEach(function (el) { el.dataset.to = el.textContent; });
+  if (reduced || !('IntersectionObserver' in window)) {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('in');
+        var n = en.target.querySelector && en.target.querySelector('strong[data-to]');
+        if (n) counter(n);
+        io.unobserve(en.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  }
+
+  // 2) scroll-linked transforms (one rAF per scroll, transforms/opacity only)
+  var prog = $('#scrollProg'), hero = $('.hero'), heroCopy = $('.hero-copy'), heroWin = $('.hero-visual .window');
+  var chipA = $('.chip-a'), chipB = $('.chip-b'), caseVis = $('.case-visual'), desk = $('.desk'), phone = $('.phone');
+  var scrubs = $$('video[data-scrub]');
+  var mTick = false;
+  function motion() {
+    mTick = false;
+    var y = window.scrollY, vh = window.innerHeight;
+    var max = document.documentElement.scrollHeight - vh;
+    prog.style.transform = 'scaleX(' + (max > 0 ? y / max : 0).toFixed(4) + ')';
+    if (reduced) return;
+    // hero: copy drifts up and fades, terminal window tilts back, chips float apart
+    var hh = hero.offsetHeight;
+    if (y < hh) {
+      var k = y / hh;
+      heroCopy.style.transform = 'translate3d(0,' + (y * 0.22).toFixed(1) + 'px,0)';
+      heroCopy.style.opacity = (1 - k * 1.1).toFixed(3);
+      heroWin.style.transform = 'perspective(1200px) translate3d(0,' + (y * 0.08).toFixed(1) + 'px,0) rotateX(' + (k * 14).toFixed(2) + 'deg) scale(' + (1 - k * 0.06).toFixed(4) + ')';
+      chipA.style.transform = 'translate3d(' + (-k * 40).toFixed(1) + 'px,' + (k * 30).toFixed(1) + 'px,0)';
+      chipB.style.transform = 'translate3d(' + (k * 40).toFixed(1) + 'px,' + (-k * 50).toFixed(1) + 'px,0)';
+    }
+    // case study: desktop and phone move at different depths
+    var cr = caseVis.getBoundingClientRect();
+    if (cr.bottom > 0 && cr.top < vh) {
+      var t = (cr.top + cr.height / 2 - vh / 2) / vh; // -0.5 .. 0.5 around centre
+      desk.style.transform = 'translate3d(0,' + (t * 40).toFixed(1) + 'px,0)';
+      phone.style.transform = 'translate3d(0,' + (t * -70).toFixed(1) + 'px,0) rotate(' + (t * -6).toFixed(2) + 'deg)';
+    }
+    // scroll-scrubbed videos (e.g. a Higgsfield render): currentTime follows the section's progress
+    scrubs.forEach(function (v) {
+      if (!v.duration) return;
+      var sec = v.closest('[data-scrub-track]') || v.parentNode, r = sec.getBoundingClientRect();
+      var p = clamp(-r.top / Math.max(1, r.height - vh), 0, 1);
+      var target = p * (v.duration - 0.05);
+      if (Math.abs(v.currentTime - target) > 0.03) v.currentTime = target;
+    });
+  }
+  scrubs.forEach(function (v) { v.muted = true; v.playsInline = true; v.preload = 'auto'; v.pause(); });
+  function onMotion() { if (!mTick) { mTick = true; requestAnimationFrame(motion); } }
+  window.addEventListener('scroll', onMotion, { passive: true });
+  window.addEventListener('resize', onMotion);
+  motion();
 })();
