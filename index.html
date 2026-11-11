@@ -167,51 +167,89 @@ codebase</pre>
 
 <!-- WORK -->
 <section class="section" id="work">
-  <div class="sec-head"><span class="idx">03</span><h2 data-i18n="work.title">work</h2><span class="rule" aria-hidden="true"></span><code>git log --oneline</code></div>
-  <div class="work">
-    <a class="row" href="https://gallery.mfosec.xyz" target="_blank" rel="noopener">
-      <span class="tag build" data-i18n="tag.build">build</span>
-      <strong>Galeri Piyasa</strong>
-      <span class="desc" data-i18n="w1">Market-price intelligence for car dealers — landing page with an in-browser estimate demo.</span>
-      <span class="stack">web · workers</span><span class="go">↗</span>
-    </a>
-    <a class="row" href="https://davetimhazir.xyz" target="_blank" rel="noopener">
-      <span class="tag build" data-i18n="tag.build">build</span>
-      <strong>davetim hazır</strong>
-      <span class="desc" data-i18n="w2">Digital invitation platform: marketing site plus live, themed invitation templates.</span>
-      <span class="stack">web</span><span class="go">↗</span>
-    </a>
-    <div class="row">
-      <span class="tag build" data-i18n="tag.build">build</span>
-      <strong data-i18n="w3t">Inventory app</strong>
-      <span class="desc" data-i18n="w3">Mobile stock-management app for an auto-parts depot, built for a client.</span>
-      <span class="stack">expo · supabase</span><span class="go nda">NDA</span>
+  <div class="sec-head"><span class="idx">03</span><h2 data-i18n="work.title">work</h2><span class="rule" aria-hidden="true"></span><code>cat experience.log</code></div>
+
+  <h3 class="sub-head"><span class="kicker">// </span><span data-i18n="bb.title">bug bounty experience</span></h3>
+  <p class="sub-lede" data-i18n="bb.lede">Smart-contract and protocol findings submitted to public bug bounty programs on Cantina, Immunefi and HackenProof — each with a runnable proof of concept. Across EVM, Cosmos SDK (Go) and TON (FunC).</p>
+  <div class="bb">
+    <div class="bb-row bb-headrow" aria-hidden="true"><span data-i18n="bb.h1">sev</span><span data-i18n="bb.h2">program</span><span data-i18n="bb.h3">finding</span><span data-i18n="bb.h4">stack</span><span data-i18n="bb.h5">platform</span></div>
+    <div class="bb-row">
+      <span class="sev crit">critical</span>
+      <span class="prog">OKX Labs <em>DEX router</em></span>
+      <span class="find" data-i18n="bb.f1">Unrestricted public swap entry point lets anyone route the router's residual ERC20 balance to themselves</span>
+      <span class="stk">solidity</span>
+      <span class="plat">cantina · <i data-i18n="bb.dup">dup</i></span>
     </div>
-    <a class="row" href="https://github.com/mfos3c/solana-devnet-miniapp" target="_blank" rel="noopener">
-      <span class="tag build" data-i18n="tag.build">build</span>
-      <strong>Solana mini app</strong>
-      <span class="desc" data-i18n="w4">Telegram Mini App with a serverless back end — wallet balances and Orca devnet swaps.</span>
-      <span class="stack">telegram · solana</span><span class="go">↗</span>
-    </a>
-    <a class="row" href="https://github.com/mfos3c/veda-boringvault-h01-poc" target="_blank" rel="noopener">
-      <span class="tag sec">web3</span>
-      <strong>BoringVault PoC</strong>
-      <span class="desc" data-i18n="w5">Veda: depositAndBridge reverts whenever shareLockPeriod &gt; 0 — 32 affected configs. Medium.</span>
-      <span class="stack">foundry</span><span class="go">↗</span>
-    </a>
-    <a class="row" href="https://github.com/mfos3c/zano-difficulty-test" target="_blank" rel="noopener">
-      <span class="tag sec">web3</span>
-      <strong>Zano difficulty</strong>
-      <span class="desc" data-i18n="w6">Core test reproducing a difficulty-misalignment issue in Zano.</span>
-      <span class="stack">c++</span><span class="go">↗</span>
-    </a>
-    <a class="row" href="https://github.com/mfos3c/403-annihilator" target="_blank" rel="noopener">
-      <span class="tag web">appsec</span>
-      <strong>403-Annihilator</strong>
-      <span class="desc" data-i18n="w7">WAF / 403 bypass tool: 192+ payloads, WAF fingerprinting, Caido integration.</span>
-      <span class="stack">bash · caido</span><span class="go">↗</span>
-    </a>
+    <div class="bb-row">
+      <span class="sev crit">critical</span>
+      <span class="prog">OKX Labs <em>DEX router</em></span>
+      <span class="find" data-i18n="bb.f2">Commission library pays the referrer the router's full token balance instead of only the pulled commission</span>
+      <span class="stk">solidity · yul</span>
+      <span class="plat">cantina · <i data-i18n="bb.dup">dup</i></span>
+    </div>
+    <div class="bb-row">
+      <span class="sev high">high</span>
+      <span class="prog">dYdX <em>v4 chain</em></span>
+      <span class="find" data-i18n="bb.f3">Float64 precision loss in market listing makes atomicResolution off by one — permanent 10× wrong margins in permissionless markets</span>
+      <span class="stk">go · cosmos</span>
+      <span class="plat">cantina · <i data-i18n="bb.dup">dup</i></span>
+    </div>
+    <div class="bb-row">
+      <span class="sev high">high</span>
+      <span class="prog">SSV Network</span>
+      <span class="find" data-i18n="bb.f4">Operator removal with active validators orphans them — permanent freezing of staked ETH</span>
+      <span class="stk">solidity · staking</span>
+      <span class="plat">immunefi · <i data-i18n="bb.dup">dup</i></span>
+    </div>
+    <div class="bb-row">
+      <span class="sev high">high</span>
+      <span class="prog">Whitechain <em>bridge</em></span>
+      <span class="find" data-i18n="bb.f5">Relayer ECDSA hash omits the mapping id — a signature for one token mapping is replayable on another</span>
+      <span class="stk">solidity · bridge</span>
+      <span class="plat">hackenproof · <i data-i18n="bb.dup">dup</i></span>
+    </div>
+    <div class="bb-row">
+      <span class="sev na">—</span>
+      <span class="prog">STON.fi <em>DEX v2</em></span>
+      <span class="find" data-i18n="bb.f6">Pool and router silently drop bounced messages — reserves desync and funds are orphaned on failed transfers</span>
+      <span class="stk">func · ton</span>
+      <span class="plat">hackenproof · <i data-i18n="bb.dup">dup</i></span>
+    </div>
+    <div class="bb-row">
+      <span class="sev med">medium</span>
+      <span class="prog">Veda <em>BoringVault</em></span>
+      <span class="find" data-i18n="bb.f7">depositAndBridge always reverts when a share lock is set — 32 affected teller configs</span>
+      <span class="stk">solidity · foundry</span>
+      <span class="plat"><a href="https://github.com/mfos3c/veda-boringvault-h01-poc" target="_blank" rel="noopener">poc ↗</a></span>
+    </div>
   </div>
+  <p class="bb-note" data-i18n="bb.note">dup = confirmed valid by triage, but another researcher reported it first. Contract addresses and PoCs are withheld.</p>
+
+  <h3 class="sub-head"><span class="kicker">// </span><span data-i18n="pj.title">featured build</span></h3>
+  <article class="project">
+    <pre class="pj-art" aria-hidden="true">┌────────────────────┐
+│ ▣ UZMANLAR DEPO    │
+├────────────────────┤
+│ tork konv.     x3  │
+│ abs beyni      x1  │
+│ turbo          x2  │
+│ ▒▒▒▒▒▒▒▒░░░ sayım  │
+├────────────────────┤
+│ [QR] [+] [-] [TL]  │
+└────────────────────┘</pre>
+    <div>
+      <p class="kicker" data-i18n="pj.kicker">// client · auto parts</p>
+      <h3>Uzmanlar Depo</h3>
+      <p data-i18n="pj.text">Stock-counting and accounting app for an auto parts depot. Staff scan QR labels on a handheld Android terminal, count shelves offline and sync when back online; the office runs the same data on a desktop app. Supabase is the single source of truth, with per-employee roles.</p>
+      <ul class="pj-feats">
+        <li data-i18n="pj.f1">QR / camera stock counting, works offline</li>
+        <li data-i18n="pj.f2">parts catalog with photos and OEM numbers</li>
+        <li data-i18n="pj.f3">stock movements, valuation and accounting</li>
+        <li data-i18n="pj.f4">mobile + desktop from one shared TypeScript core</li>
+      </ul>
+      <p class="pj-stack">react native · tauri 2 · react/vite · supabase · sqlite</p>
+    </div>
+  </article>
 </section>
 
 <!-- CONTACT -->

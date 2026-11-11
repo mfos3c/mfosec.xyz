@@ -30,14 +30,22 @@
     'c2.l1': 'authN/Z bypass · IDOR · SSRF', 'c2.l2': 'request smuggling · cache poisoning', 'c2.l3': 'JWT / OAuth açıkları · WAF bypass',
     'c3.t': 'çapraz platform uygulamalar', 'c3.d': 'Tek kod tabanı, her ekran. Native hissettiren mobil uygulamalar, hızlı web uygulamaları ve masaüstü sürümler; ölçeklenen bir backend ile.',
     'c3.l3': 'App Store ve Play Store yayını', 'c3.l4': 'Telegram mini app · dApp arayüzleri',
-    'work.title': 'işler', 'tag.build': 'yapım',
-    'w1': 'Galericiler için piyasa fiyatı analizi — tarayıcıda çalışan tahmin demosu olan tanıtım sayfası.',
-    'w2': 'Dijital davetiye platformu: pazarlama sitesi ve canlı, temalı davetiye şablonları.',
-    'w3t': 'Envanter uygulaması', 'w3': 'Bir yedek parça deposu için mobil stok yönetim uygulaması (müşteri projesi).',
-    'w4': 'Serverless backend\'li Telegram Mini App — cüzdan bakiyeleri ve Orca devnet swap\'ları.',
-    'w5': 'Veda: shareLockPeriod > 0 olduğunda depositAndBridge her zaman revert ediyor — 32 etkilenen konfig. Medium.',
-    'w6': 'Zano\'daki zorluk (difficulty) uyumsuzluğunu yeniden üreten core testi.',
-    'w7': 'WAF / 403 bypass aracı: 192+ payload, WAF tespiti, Caido entegrasyonu.',
+    'work.title': 'işler',
+    'bb.title': 'bug bounty tecrübesi',
+    'bb.lede': 'Cantina, Immunefi ve HackenProof\'taki açık bug bounty programlarına gönderilen akıllı kontrat ve protokol bulguları — her biri çalışan bir PoC ile. EVM, Cosmos SDK (Go) ve TON (FunC) üzerinde.',
+    'bb.h1': 'seviye', 'bb.h2': 'program', 'bb.h3': 'bulgu', 'bb.h4': 'teknoloji', 'bb.h5': 'platform', 'bb.dup': 'dup',
+    'bb.f1': 'Kısıtlamasız public swap fonksiyonu, router\'da kalan ERC20 bakiyesini herkesin kendine aktarmasına izin veriyor',
+    'bb.f2': 'Komisyon kütüphanesi referrer\'a sadece çekilen komisyonu değil router\'ın tüm token bakiyesini gönderiyor',
+    'bb.f3': 'Market listelemede float64 hassasiyet kaybı atomicResolution\'ı bir kaydırıyor — izinsiz marketlerde kalıcı 10× yanlış teminat',
+    'bb.f4': 'Aktif validator\'ı olan operatörün silinmesi validator\'ları sahipsiz bırakıyor — stake edilmiş ETH kalıcı olarak donuyor',
+    'bb.f5': 'Relayer ECDSA hash\'i mapping id\'yi içermiyor — bir token eşlemesi için verilen imza başka eşlemede tekrar kullanılabiliyor',
+    'bb.f6': 'Pool ve router geri dönen (bounce) mesajları sessizce yutuyor — başarısız transferlerde rezervler bozuluyor, fonlar sahipsiz kalıyor',
+    'bb.f7': 'Share lock açıkken depositAndBridge her zaman revert ediyor — 32 etkilenen teller konfigürasyonu',
+    'bb.note': 'dup = triage tarafından geçerli bulundu, ancak başka bir araştırmacı daha önce raporlamıştı. Kontrat adresleri ve PoC\'ler paylaşılmıyor.',
+    'pj.title': 'öne çıkan proje', 'pj.kicker': '// müşteri · yedek parça',
+    'pj.text': 'Bir yedek parça deposu için stok sayım ve muhasebe uygulaması. Çalışanlar Android el terminaliyle QR etiketleri okutup rafları çevrimdışı sayıyor, bağlantı gelince senkronize ediliyor; ofis aynı veriyi masaüstü uygulamasından yönetiyor. Supabase tek doğruluk kaynağı, çalışan bazlı yetkilerle.',
+    'pj.f1': 'QR / kamera ile stok sayımı, çevrimdışı çalışır', 'pj.f2': 'fotoğraflı ve OEM numaralı parça kataloğu',
+    'pj.f3': 'stok hareketleri, değerleme ve muhasebe', 'pj.f4': 'tek TypeScript çekirdekten mobil + masaüstü',
     'ct.title': 'iletişim', 'ct.big': 'Denetlenmesi mi, yapılması mı gerekiyor?',
     'ct.text': 'Kapsamı, repoyu ya da fikri ve kabaca bir takvimi gönder. Bir gün içinde dönüş yapıyoruz.',
     'foot.credit': 'ASCII efektleri 21st.dev topluluk bileşenlerinden uyarlandı (Background ASCII Plasma, Text ASCII Cascade — @nikolas-sapa)'
@@ -62,7 +70,7 @@
   /* ------------------------------------------------------------------ */
   /* Hero + background                                                   */
   /* ------------------------------------------------------------------ */
-  A.glyphTide($('#tide'), { cellSize: 13 });
+  A.glyphTide($('#tide'), { cellSize: 14 });
   A.asciiCascade($('#banner'), A.blockText('MFOSEC'));
   $('#yr').textContent = new Date().getFullYear();
 
@@ -236,14 +244,18 @@
   function lerp(a, b, t) { return a + (b - a) * t; }
 
   var STAGES = ['booting', 'opening lid', 'rotating chassis', 'unhinging display', 'exploding layers', 'inventory'];
-  var lastP = -1, ticking = false;
+  var lastP = -1, ticking = false, force = true, litState = null;
 
   function render() {
     ticking = false;
     var r = section.getBoundingClientRect();
+    // off-screen or unchanged: touch nothing (writing 3D transforms forces a costly restyle)
+    if (r.bottom < 0 || r.top > window.innerHeight) { if (!force) return; }
     var total = section.offsetHeight - window.innerHeight;
     var p = clamp(-r.top / total, 0, 1);
-    var sr = stage.getBoundingClientRect();
+    if (!force && Math.abs(p - lastP) < 0.0005) return;
+    force = false;
+    var sr = stage.getBoundingClientRect(); // read before any writes this frame
     var narrow = sr.width < 860;
 
     var a = ease(seg(p, 0.02, 0.16));   // lid opens
@@ -287,7 +299,7 @@
     // screen + highlights
     if (p > 0.08) runTerm(); else if (p < 0.01 && termStarted) resetTerm();
     var exploded = d > 0.7;
-    Object.keys(P).forEach(function (k) { P[k].classList.toggle('lit', exploded); });
+    if (exploded !== litState) { litState = exploded; Object.keys(P).forEach(function (k) { P[k].classList.toggle('lit', exploded); }); }
 
     // labels next to each layer
     var show = e > 0.55;
@@ -314,7 +326,7 @@
   }
   function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(render); } }
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
+  window.addEventListener('resize', function () { force = true; onScroll(); });
 
   setLang(lang);
   render();
